@@ -25,16 +25,43 @@ export default function ContractPage() {
 
   useEffect(() => {
     const contractId = params.id as string;
-    const storedContract = localStorage.getItem(`contract-${contractId}`);
     const storedPrompt = localStorage.getItem(`contract-${contractId}-prompt`);
 
-    if (storedContract) {
-      setContract(JSON.parse(storedContract));
-      setEditedContent(JSON.parse(storedContract).content);
-    }
-    if (storedPrompt) {
-      setOriginalPrompt(storedPrompt);
-    }
+    if (!storedPrompt) return;
+
+    setOriginalPrompt(storedPrompt);
+
+    // Call the OpenAI-backed API
+    const fetchContract = async () => {
+      try {
+        const res = await fetch('/api/generate-contract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: storedPrompt }),
+        });
+
+        const data = await res.json();
+
+        if (data.contract) {
+          const contractData = {
+            title: 'Generated Contract',
+            type: 'Service Agreement',
+            content: data.contract,
+          };
+
+          setContract(contractData);
+          setEditedContent(data.contract);
+
+          localStorage.setItem(`contract-${contractId}`, JSON.stringify(contractData));
+        } else {
+          console.error('❌ No contract in response', data);
+        }
+      } catch (error) {
+        console.error('❌ Failed to fetch contract:', error);
+      }
+    };
+
+    fetchContract();
   }, [params.id]);
 
   const handleCopy = async () => {
@@ -178,6 +205,21 @@ export default function ContractPage() {
               >
                 {contract.content}
               </ReactMarkdown>
+            </div>
+            {/* Signature Section */}
+            <div className="mt-12 border-t pt-6 border-border text-foreground">
+              <h2 className="text-xl font-semibold mb-4">Signatures</h2>
+
+              <div className="flex flex-col space-y-6">
+                <div>
+                  <div className="border-b border-muted h-10 w-64"></div>
+                  <p className="text-sm text-foreground mt-1">Client Signature</p>
+                </div>
+                <div>
+                  <div className="border-b border-muted h-10 w-64"></div>
+                  <p className="text-sm text-foreground mt-1">Service Provider Signature</p>
+                </div>
+              </div>
             </div>
           </div>
         )}

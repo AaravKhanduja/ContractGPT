@@ -120,7 +120,14 @@ Date: ___________________________`;
 
       // In a real app, you'd save the contract to a database here
       // For now, we'll store it in localStorage for the demo
-      localStorage.setItem(`contract-${contractId}`, mockContract);
+      localStorage.setItem(
+        `contract-${contractId}`,
+        JSON.stringify({
+          title: contractName,
+          type: projectType,
+          content: mockContract,
+        })
+      );
       localStorage.setItem(`contract-${contractId}-prompt`, input);
       localStorage.setItem(`contract-${contractId}-name`, contractName);
 
