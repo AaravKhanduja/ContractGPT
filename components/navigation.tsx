@@ -14,7 +14,7 @@ export default function Navigation({ isAuthenticated = false }: NavigationProps)
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/new', label: 'New Contract', icon: Plus },
+    { href: '/', label: 'New Contract', icon: Plus },
     { href: '/contracts', label: 'My Contracts', icon: FileText },
   ];
 
