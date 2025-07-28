@@ -129,7 +129,6 @@ Date: ___________________________`;
         })
       );
       localStorage.setItem(`contract-${contractId}-prompt`, input);
-      localStorage.setItem(`contract-${contractId}-name`, contractName);
 
       router.push(`/contract/${contractId}`);
       setLoading(false);

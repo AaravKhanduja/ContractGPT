@@ -26,12 +26,11 @@ export default function ContractPage() {
   useEffect(() => {
     const contractId = params.id as string;
     const storedPrompt = localStorage.getItem(`contract-${contractId}-prompt`);
+    const existing = localStorage.getItem(`contract-${contractId}`);
 
     if (!storedPrompt) return;
-
     setOriginalPrompt(storedPrompt);
 
-    // Call the OpenAI-backed API
     const fetchContract = async () => {
       try {
         const res = await fetch('/api/generate-contract', {
@@ -43,8 +42,19 @@ export default function ContractPage() {
         const data = await res.json();
 
         if (data.contract) {
+          let title = 'Generated Contract';
+
+          if (existing) {
+            try {
+              const parsed = JSON.parse(existing);
+              if (parsed.title) title = parsed.title;
+            } catch (err) {
+              console.warn('Could not parse existing contract:', err);
+            }
+          }
+
           const contractData = {
-            title: 'Generated Contract',
+            title,
             type: 'Service Agreement',
             content: data.contract,
           };
@@ -80,11 +90,8 @@ export default function ContractPage() {
     if (contract) {
       const updatedContract = { ...contract, content: editedContent };
       setContract(updatedContract);
-
-      // Save to localStorage
       const contractId = params.id as string;
       localStorage.setItem(`contract-${contractId}`, JSON.stringify(updatedContract));
-
       setIsEditing(false);
     }
   };
@@ -97,7 +104,6 @@ export default function ContractPage() {
   };
 
   const handleDownload = () => {
-    // Download temporarily disabled
     alert('Download feature is currently unavailable.');
   };
 
