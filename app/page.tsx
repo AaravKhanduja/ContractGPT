@@ -17,12 +17,7 @@ export default function NewContractPage() {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Button variant="ghost" className="mb-4 hover:bg-accent" onClick={() => router.back()}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-
-            <div className="flex items-center space-x-3 mb-2">
+            <div className="flex items-center space-x-3 mt-4 mb-2">
               <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-primary" />
               </div>
