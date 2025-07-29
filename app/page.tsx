@@ -1,14 +1,8 @@
-'use client';
-
 import Navigation from '@/components/navigation';
 import ContractForm from '@/components/forms/contract-form';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Sparkles } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Sparkles } from 'lucide-react';
 
 export default function NewContractPage() {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/10">
       <Navigation isAuthenticated={true} />
