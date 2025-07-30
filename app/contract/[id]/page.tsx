@@ -7,6 +7,7 @@ import { Download, Edit, Save, X } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import ReactMarkdown from 'react-markdown';
 import Navigation from '@/components/navigation';
+import { generateContractPDF } from '@/lib/pdf-utils';
 
 interface ContractData {
   title: string;
@@ -104,7 +105,14 @@ export default function ContractPage() {
   };
 
   const handleDownload = () => {
-    alert('Download feature is currently unavailable.');
+    if (contract) {
+      generateContractPDF({
+        title: contract.title,
+        type: contract.type,
+        content: contract.content,
+        prompt: originalPrompt,
+      });
+    }
   };
 
   if (!contract) {
