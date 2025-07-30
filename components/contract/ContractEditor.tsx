@@ -236,14 +236,6 @@ export default function ContractEditor({
       <div className="p-4">
         <EditorContent editor={editor} />
       </div>
-
-      {/* Action buttons */}
-      <div className="border-t p-4 flex justify-end gap-2">
-        <Button variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button onClick={onSave}>Save Changes</Button>
-      </div>
     </div>
   );
 }

@@ -132,20 +132,6 @@ export default function ContractPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Action Buttons */}
-        {!isEditing && (
-          <div className="mb-6 flex justify-end space-x-2">
-            <Button variant="outline" onClick={handleEdit} className="hover:bg-accent">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-            <Button variant="outline" onClick={handleDownload} className="hover:bg-accent">
-              <Download className="h-4 w-4 mr-2" />
-              Download
-            </Button>
-          </div>
-        )}
-
         {/* Original Prompt */}
         {originalPrompt && (
           <div className="mb-8 p-4 bg-accent/50 rounded-lg border border-accent">
@@ -153,6 +139,33 @@ export default function ContractPage() {
             <p className="text-sm text-muted-foreground italic">"{originalPrompt}"</p>
           </div>
         )}
+
+        {/* Action Buttons */}
+        <div className="mb-6 flex justify-end space-x-2">
+          {isEditing ? (
+            <>
+              <Button variant="outline" onClick={handleCancel} className="hover:bg-accent">
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
+                <Save className="h-4 w-4 mr-2" />
+                Save
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="outline" onClick={handleEdit} className="hover:bg-accent">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+              <Button variant="outline" onClick={handleDownload} className="hover:bg-accent">
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </Button>
+            </>
+          )}
+        </div>
 
         {/* Contract Content */}
         {isEditing ? (
