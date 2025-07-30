@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Download, Edit, Save, X } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
 import ReactMarkdown from 'react-markdown';
 import Navigation from '@/components/navigation';
 import { generateContractPDF } from '@/lib/pdf-utils';
+import ContractEditor from '@/components/contract/ContractEditor';
 
 interface ContractData {
   title: string;
@@ -133,31 +133,18 @@ export default function ContractPage() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Action Buttons */}
-        <div className="mb-6 flex justify-end space-x-2">
-          {isEditing ? (
-            <>
-              <Button variant="outline" onClick={handleCancel} className="hover:bg-accent">
-                <X className="h-4 w-4 mr-2" />
-                Cancel
-              </Button>
-              <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
-                <Save className="h-4 w-4 mr-2" />
-                Save
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button variant="outline" onClick={handleEdit} className="hover:bg-accent">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
-              </Button>
-              <Button variant="outline" onClick={handleDownload} className="hover:bg-accent">
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-            </>
-          )}
-        </div>
+        {!isEditing && (
+          <div className="mb-6 flex justify-end space-x-2">
+            <Button variant="outline" onClick={handleEdit} className="hover:bg-accent">
+              <Edit className="h-4 w-4 mr-2" />
+              Edit
+            </Button>
+            <Button variant="outline" onClick={handleDownload} className="hover:bg-accent">
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+          </div>
+        )}
 
         {/* Original Prompt */}
         {originalPrompt && (
@@ -169,17 +156,12 @@ export default function ContractPage() {
 
         {/* Contract Content */}
         {isEditing ? (
-          <div className="bg-background contract-content">
-            <div className="prose prose-gray max-w-none leading-relaxed">
-              <Textarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="min-h-[600px] w-full border-none bg-transparent text-foreground leading-relaxed resize-none focus:outline-none focus:ring-0 text-base p-0"
-                placeholder="Edit your contract content here..."
-                style={{ fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit' }}
-              />
-            </div>
-          </div>
+          <ContractEditor
+            content={editedContent}
+            onChange={setEditedContent}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         ) : (
           <div className="bg-background contract-content">
             <div className="prose prose-gray max-w-none leading-relaxed">
