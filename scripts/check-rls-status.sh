@@ -50,7 +50,7 @@ echo "   - SUPABASE_ANON_KEY"
 echo "   - SUPABASE_SERVICE_ROLE_KEY"
 echo ""
 echo "5. Deploy to production:"
-echo "   - Follow DEPLOYMENT.md for platform-specific instructions"
+echo "   - Follow README.md for platform-specific instructions"
 echo ""
 
 echo "🔍 Verification Commands:"
