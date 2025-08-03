@@ -10,11 +10,17 @@
     "prepare": "husky",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "deploy:check": "bash scripts/deploy.sh",
+    "db:setup": "echo 'Run scripts/setup-database.sql in your Supabase SQL editor'",
+    "env:validate": "node -e \"require('./lib/env').validateEnv()\"",
+    "rls:check": "bash scripts/check-rls-status.sh"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.53.0",
     "@tiptap/extension-bold": "^3.0.7",
     "@tiptap/extension-heading": "^3.0.7",
     "@tiptap/extension-italic": "^3.0.7",
