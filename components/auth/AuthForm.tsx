@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { FileText, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
-import { signIn, signInWithGoogle, signUp } from '@/lib/auth';
+import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 
 interface AuthFormProps {
@@ -17,9 +17,11 @@ interface AuthFormProps {
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
+  const { signIn, signUp, signInWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,14 +38,23 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
     try {
       if (isLogin) {
-        await signIn(formData.email, formData.password);
+        const { error } = await signIn(formData.email, formData.password);
+        if (error) throw new Error(error.message);
+        router.push('/contracts');
       } else {
         if (formData.password !== formData.confirmPassword) {
           throw new Error('Passwords do not match');
         }
-        await signUp(formData.email, formData.password, formData.name);
+        const { error } = await signUp(formData.email, formData.password);
+        if (error) throw new Error(error.message);
+
+        // Show success message for email verification
+        setError(''); // Clear any previous errors
+        setSuccess('Please check your email to verify your account before signing in.');
+        setLoading(false);
+        // Don't redirect - show verification message instead
+        return;
       }
-      router.push('/contracts');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -56,7 +67,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setError('');
 
     try {
-      await signInWithGoogle();
+      const { error } = await signInWithGoogle();
+      if (error) throw new Error(error.message);
       router.push('/contracts');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -107,6 +119,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
               {error && (
                 <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
                   <p className="text-sm text-destructive">{error}</p>
+                </div>
+              )}
+
+              {/* Success Message */}
+              {success && (
+                <div className="mb-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                  <p className="text-sm text-green-600">{success}</p>
                 </div>
               )}
 

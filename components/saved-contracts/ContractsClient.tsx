@@ -5,7 +5,7 @@ import ContractCard from './ContractCard';
 import ContractStats from './ContractStats';
 import EmptyState from './EmptyState';
 import { SavedContract } from './Types';
-import { generateContractPDF } from '@/lib/pdf-utils';
+import { generateContractPDF } from '@/utils/pdf-utils';
 
 export default function ContractsClient() {
   const [contracts, setContracts] = useState<SavedContract[]>([]);
@@ -16,28 +16,21 @@ export default function ContractsClient() {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith('contract-') && !key.includes('-prompt')) {
-        const contractData = localStorage.getItem(key);
+        const value = localStorage.getItem(key);
         const promptData = localStorage.getItem(`${key}-prompt`);
 
-        if (contractData) {
+        if (value) {
           try {
-            const contract = JSON.parse(contractData);
-            const contractId = key.replace('contract-', '');
-            const timestampMatch = contractId.match(/\d+$/);
-            const timestamp = timestampMatch ? Number(timestampMatch[0]) : Date.now();
-
-            loadedContracts.push({
-              id: contractId,
-              title: contract.title,
-              type: contract.type,
-              content: contract.content,
-              prompt: promptData || '',
-              createdAt: new Date(timestamp).toLocaleDateString(),
-            });
+            const contract = JSON.parse(value);
+            if (contract && typeof contract === 'object') {
+              loadedContracts.push({
+                id: key.replace('contract-', ''),
+                ...contract,
+              });
+            }
           } catch (error) {
-            console.warn(`Invalid JSON for key ${key}, removing`);
+            // Invalid JSON, removing from localStorage
             localStorage.removeItem(key);
-            localStorage.removeItem(`${key}-prompt`);
           }
         }
       }

@@ -56,7 +56,7 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
 
           <div className="space-y-2">
             <Label htmlFor="client-input" className="text-base font-medium">
-              Paste client's message or brief
+              Paste client&apos;s message or brief
             </Label>
             <Textarea
               id="client-input"
