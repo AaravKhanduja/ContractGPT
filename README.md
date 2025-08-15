@@ -14,19 +14,13 @@ AI-powered contract generation tool that transforms client requests into profess
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- **Node.js 18+** (required for Next.js development and build)
-- **npm or yarn** (package manager)
-- **OpenAI API key** (for contract generation)
-
-### Installation
+### For Contributors (Development Mode)
 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/AaravKhanduja/ContractGPT.git
-   cd ContractGPT
+   git clone https://github.com/yourusername/contract-gpt.git
+   cd contract-gpt
    ```
 
 2. **Install dependencies**
@@ -35,17 +29,19 @@ AI-powered contract generation tool that transforms client requests into profess
    npm install
    ```
 
-3. **Set up environment variables**
+3. **Set up environment variables (Optional for development)**
 
    ```bash
    cp .env.example .env.local
    ```
 
-   Add your OpenAI API key:
+   For development, you only need:
 
    ```env
    OPENAI_API_KEY=your_openai_api_key_here
    ```
+
+   **Note**: Supabase is optional for development. The app will use localStorage for authentication and data storage when Supabase isn't configured.
 
 4. **Run the development server**
 
@@ -56,19 +52,26 @@ AI-powered contract generation tool that transforms client requests into profess
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+### For Production Deployment
+
+Follow the full setup guide below to configure Supabase for production use.
+
 ## 🏗️ Architecture
 
-### Development Mode
+### Development Mode (Default)
 
-- **Authentication**: Simulated with localStorage
-- **Data Storage**: localStorage for contracts
-- **No Database Required**: Works out of the box
+- **Authentication**: Simulated with localStorage (no setup required)
+- **Data Storage**: localStorage for contracts and user data
+- **No Database Required**: Works out of the box for contributors
+- **Perfect for**: Quick development, testing, and contributions
 
-### Production Mode
+### Production Mode (With Supabase)
 
 - **Authentication**: Supabase Auth with Google OAuth
-- **Database**: Supabase PostgreSQL with RLS
+- **Database**: Supabase PostgreSQL with Row Level Security (RLS)
+- **Data Storage**: Persistent database with user isolation
 - **Deployment**: Vercel, Netlify, or custom server
+- **Perfect for**: Production applications with real users
 
 ## 🛠️ Available Scripts
 
@@ -131,11 +134,34 @@ contract-gpt/
 
 ### Environment Variables
 
-| Variable            | Description                            | Required      |
-| ------------------- | -------------------------------------- | ------------- |
-| `OPENAI_API_KEY`    | OpenAI API key for contract generation | ✅            |
-| `SUPABASE_URL`      | Supabase project URL                   | ❌ (dev mode) |
-| `SUPABASE_ANON_KEY` | Supabase anonymous key                 | ❌ (dev mode) |
+| Variable         | Description                            | Required | Development |
+| ---------------- | -------------------------------------- | -------- | ----------- |
+| `OPENAI_API_KEY` | OpenAI API key for contract generation | ✅       | ✅          |
+
+**Development Mode**: Only `OPENAI_API_KEY` is required. The app will use localStorage for authentication and data storage.
+
+**Production Mode**: Uses your existing authentication system in `app/auth/`.
+
+**Optional Supabase Integration**: If you want to use Supabase for authentication, add these variables:
+
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your_supabase_anon_key_here
+```
+
+### Security Features
+
+#### Development Mode
+
+- **Local Storage**: Simulated authentication for easy development
+- **No Database**: All data stored locally in browser
+- **Zero Setup**: Perfect for contributors and testing
+
+#### Production Mode
+
+- **Existing Auth System**: Uses your current authentication setup
+- **No Client-Side Secrets**: No sensitive data exposed to browser
+- **Simple Integration**: Works with your existing auth pages
 
 ### Development vs Production
 

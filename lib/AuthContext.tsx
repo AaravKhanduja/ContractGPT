@@ -1,8 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   user: User | null;
@@ -15,72 +14,111 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Development mode user type
+interface DevUser {
+  id: string;
+  email: string;
+  user_metadata?: { name?: string };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+
+  // Check if we're in development mode
+  const isDevMode = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
-    // Get initial session
-    const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
+    if (isDevMode) {
+      // Development mode: use localStorage
+      const devUser = localStorage.getItem('dev-user');
+      if (devUser) {
+        try {
+          const parsedUser = JSON.parse(devUser) as DevUser;
+          setUser(parsedUser as User);
+        } catch {
+          localStorage.removeItem('dev-user');
+        }
+      }
       setLoading(false);
-    };
-
-    getSession();
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: string, session: Session | null) => {
-      setUser(session?.user ?? null);
+    } else {
+      // Production mode: check for existing session
+      // This would integrate with your existing auth system
       setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+    }
+  }, [isDevMode]);
 
   const signIn = useCallback(
     async (email: string, password: string) => {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      return { error };
+      if (isDevMode) {
+        // Development mode: simulate successful login
+        const devUser: DevUser = {
+          id: 'dev-user-' + Date.now(),
+          email,
+          user_metadata: { name: email.split('@')[0] },
+        };
+        localStorage.setItem('dev-user', JSON.stringify(devUser));
+        setUser(devUser as User);
+        return { error: null };
+      }
+
+      // Production mode: redirect to your existing signin page
+      window.location.href = '/auth/signin';
+      return { error: null };
     },
-    [supabase.auth]
+    [isDevMode]
   );
 
   const signUp = useCallback(
     async (email: string, password: string) => {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      return { error };
+      if (isDevMode) {
+        // Development mode: simulate successful signup
+        const devUser: DevUser = {
+          id: 'dev-user-' + Date.now(),
+          email,
+          user_metadata: { name: email.split('@')[0] },
+        };
+        localStorage.setItem('dev-user', JSON.stringify(devUser));
+        setUser(devUser as User);
+        return { error: null };
+      }
+
+      // Production mode: redirect to your existing signup page
+      window.location.href = '/auth/signup';
+      return { error: null };
     },
-    [supabase.auth]
+    [isDevMode]
   );
 
   const signInWithGoogle = useCallback(async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    return { error };
-  }, [supabase.auth]);
+    if (isDevMode) {
+      // Development mode: simulate Google login
+      const devUser: DevUser = {
+        id: 'dev-user-' + Date.now(),
+        email: 'dev-user@example.com',
+        user_metadata: { name: 'Dev User' },
+      };
+      localStorage.setItem('dev-user', JSON.stringify(devUser));
+      setUser(devUser as User);
+      return { error: null };
+    }
+
+    // Production mode: redirect to your existing Google auth
+    window.location.href = '/auth/signin';
+    return { error: null };
+  }, [isDevMode]);
 
   const signOut = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      throw error;
+    if (isDevMode) {
+      // Development mode: clear localStorage
+      localStorage.removeItem('dev-user');
+      setUser(null);
+      return;
     }
-  }, [supabase.auth]);
+
+    // Production mode: redirect to your existing signout
+    window.location.href = '/auth/signin';
+  }, [isDevMode]);
 
   const value = {
     user,

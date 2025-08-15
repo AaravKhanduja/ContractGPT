@@ -1,14 +1,23 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-// Singleton pattern to prevent multiple client instances
-let supabaseClient: ReturnType<typeof createSupabaseClient> | null = null;
+// Client-side Supabase utility for development mode only
+// In production, authentication is handled by your existing auth system
 
 export const createClient = () => {
-  if (!supabaseClient) {
-    supabaseClient = createSupabaseClient(supabaseUrl, supabaseKey);
+  // Only used in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return {
+      auth: {
+        getSession: async () => ({ data: { session: null }, error: null }),
+        onAuthStateChange: (callback: any) => ({
+          data: { subscription: { unsubscribe: () => {} } },
+        }),
+        signInWithPassword: async () => ({ data: { user: null }, error: null }),
+        signUp: async () => ({ data: { user: null }, error: null }),
+        signInWithOAuth: async () => ({ data: { user: null }, error: null }),
+        signOut: async () => ({ error: null }),
+      },
+    };
   }
-  return supabaseClient;
+
+  // In production, this should not be used
+  throw new Error('Client-side Supabase is not used in production');
 };
