@@ -1,11 +1,27 @@
+'use client';
+
 import Navigation from '@/components/navigation';
 import ContractForm from '@/components/forms/contract-form';
 import { Sparkles } from 'lucide-react';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function NewContractPage() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/10">
-      <Navigation isAuthenticated={true} />
+      <Navigation isAuthenticated={!!user} />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">
@@ -19,7 +35,7 @@ export default function NewContractPage() {
             </div>
 
             <p className="text-muted-foreground text-lg">
-              Paste your client's request below and let AI transform it into a professional
+              Paste your client&apos;s request below and let AI transform it into a professional
               contract.
             </p>
           </div>

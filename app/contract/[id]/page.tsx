@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Download, Edit, Save, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Navigation from '@/components/navigation';
-import { generateContractPDF } from '@/lib/pdf-utils';
+import { generateContractPDF } from '@/utils/pdf-utils';
 import ContractEditor from '@/components/contract/ContractEditor';
+import { useAuth } from '@/lib/AuthContext';
 
 interface ContractData {
   title: string;
@@ -18,6 +19,7 @@ interface ContractData {
 export default function ContractPage() {
   const params = useParams();
   const router = useRouter();
+  const { user, loading } = useAuth();
   const [contract, setContract] = useState<ContractData | null>(null);
   const [originalPrompt, setOriginalPrompt] = useState('');
   const [copied, setCopied] = useState(false);
@@ -50,7 +52,7 @@ export default function ContractPage() {
               const parsed = JSON.parse(existing);
               if (parsed.title) title = parsed.title;
             } catch (err) {
-              console.warn('Could not parse existing contract:', err);
+              // Could not parse existing contract, using default title
             }
           }
 
@@ -126,9 +128,20 @@ export default function ContractPage() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      <Navigation isAuthenticated={true} />
+      <Navigation isAuthenticated={!!user} />
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
@@ -136,7 +149,7 @@ export default function ContractPage() {
         {originalPrompt && (
           <div className="mb-8 p-4 bg-accent/50 rounded-lg border border-accent">
             <h3 className="text-sm font-medium text-foreground mb-2">Original Request:</h3>
-            <p className="text-sm text-muted-foreground italic">"{originalPrompt}"</p>
+            <p className="text-sm text-muted-foreground italic">&ldquo;{originalPrompt}&rdquo;</p>
           </div>
         )}
 

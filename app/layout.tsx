@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { AuthProvider } from '@/lib/AuthContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,7 +19,11 @@ export const metadata: Metadata = {
     'Transform client requests into professional contracts with AI assistance. Built with Next.js, TypeScript, and OpenAI.',
   keywords: 'contract generation, AI contracts, legal documents, freelance contracts',
   authors: [{ name: 'ContractGPT Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -28,7 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

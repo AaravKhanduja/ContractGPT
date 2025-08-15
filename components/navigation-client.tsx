@@ -1,18 +1,29 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { FileText, Plus, User, LogOut } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function NavigationClient() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useAuth();
 
   const navItems = [
     { href: '/', label: 'New Contract', icon: Plus },
     { href: '/contracts', label: 'My Contracts', icon: FileText },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <>
@@ -45,7 +56,7 @@ export default function NavigationClient() {
             <User className="w-4 h-4 mr-2" />
             Profile
           </Button>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Logout</span>
           </Button>
@@ -71,6 +82,10 @@ export default function NavigationClient() {
               </Link>
             );
           })}
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="w-full justify-start">
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </Button>
         </div>
       </div>
     </>
