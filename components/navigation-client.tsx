@@ -6,11 +6,14 @@ import { Button } from '@/components/ui/button';
 import { FileText, Plus, User, LogOut } from 'lucide-react';
 import { cn } from '@/utils';
 import { useAuth } from '@/lib/AuthContext';
+import { useState } from 'react';
+import ProfileOverlay from './ProfileOverlay';
 
 export default function NavigationClient() {
   const pathname = usePathname();
   const router = useRouter();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
   const navItems = [
     { href: '/', label: 'New Contract', icon: Plus },
@@ -20,6 +23,7 @@ export default function NavigationClient() {
   const handleLogout = async () => {
     try {
       await signOut();
+      router.push('/auth/signin');
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -52,7 +56,12 @@ export default function NavigationClient() {
 
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm" className="hidden sm:flex">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden sm:flex"
+            onClick={() => setShowProfileOverlay(true)}
+          >
             <User className="w-4 h-4 mr-2" />
             Profile
           </Button>
@@ -82,12 +91,30 @@ export default function NavigationClient() {
               </Link>
             );
           })}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowProfileOverlay(true)}
+            className="w-full justify-start"
+          >
+            <User className="w-4 h-4 mr-2" />
+            Profile
+          </Button>
           <Button variant="ghost" size="sm" onClick={handleLogout} className="w-full justify-start">
             <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
         </div>
       </div>
+
+      {/* Profile Overlay */}
+      {showProfileOverlay && (
+        <ProfileOverlay
+          user={user}
+          onClose={() => setShowProfileOverlay(false)}
+          onLogout={handleLogout}
+        />
+      )}
     </>
   );
 }
