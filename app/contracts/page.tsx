@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/AuthContext';
 
 export default function ContractsPage() {
   const { user, loading } = useAuth();
+  const isDevMode = process.env.NODE_ENV === 'development';
 
   if (loading) {
     return (
@@ -23,7 +24,7 @@ export default function ContractsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation isAuthenticated={!!user} />
+      <Navigation isAuthenticated={isDevMode || !!user} />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-6xl mx-auto">
