@@ -12,10 +12,11 @@ export default function ContractsClient() {
 
   useEffect(() => {
     const loadedContracts: SavedContract[] = [];
+    const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
 
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith('contract-') && !key.includes('-prompt')) {
+      if (key && key.startsWith(`${envPrefix}contract-`) && !key.includes('-prompt')) {
         const value = localStorage.getItem(key);
         const promptData = localStorage.getItem(`${key}-prompt`);
 
@@ -24,7 +25,7 @@ export default function ContractsClient() {
             const contract = JSON.parse(value);
             if (contract && typeof contract === 'object') {
               loadedContracts.push({
-                id: key.replace('contract-', ''),
+                id: key.replace(`${envPrefix}contract-`, ''),
                 ...contract,
               });
             }
@@ -44,8 +45,9 @@ export default function ContractsClient() {
 
   const handleDelete = (contractId: string) => {
     if (confirm('Are you sure you want to delete this contract?')) {
-      localStorage.removeItem(`contract-${contractId}`);
-      localStorage.removeItem(`contract-${contractId}-prompt`);
+      const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
+      localStorage.removeItem(`${envPrefix}contract-${contractId}`);
+      localStorage.removeItem(`${envPrefix}contract-${contractId}-prompt`);
       setContracts(contracts.filter((c) => c.id !== contractId));
     }
   };

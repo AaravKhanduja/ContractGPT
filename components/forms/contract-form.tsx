@@ -117,18 +117,19 @@ Date: ___________________________`;
 
       // Generate contract ID and navigate to contract page
       const contractId = 'mock-contract-' + Date.now();
+      const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
 
       // In a real app, you'd save the contract to a database here
       // For now, we'll store it in localStorage for the demo
       localStorage.setItem(
-        `contract-${contractId}`,
+        `${envPrefix}contract-${contractId}`,
         JSON.stringify({
           title: contractName,
           type: projectType,
           content: mockContract,
         })
       );
-      localStorage.setItem(`contract-${contractId}-prompt`, input);
+      localStorage.setItem(`${envPrefix}contract-${contractId}-prompt`, input);
 
       router.push(`/contract/${contractId}`);
       setLoading(false);
