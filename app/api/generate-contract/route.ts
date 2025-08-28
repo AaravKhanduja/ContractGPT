@@ -45,12 +45,9 @@ Return markdown only. Use headings (##, ###), bold for important text, and clean
     });
 
     const data = await response.json();
-    //console.log('OpenAI API response:', data);
     const contract = data.choices?.[0]?.message?.content;
-    //console.log('Generated contract:', contract);
     return NextResponse.json({ contract });
   } catch (err) {
-    //console.error('Error generating contract:', err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

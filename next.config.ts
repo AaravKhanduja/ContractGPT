@@ -1,11 +1,8 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
   images: {
-    domains: ['localhost'],
+    domains: process.env.NODE_ENV === 'development' ? ['localhost'] : ['localhost'], // Add your production domains here when needed
   },
   turbopack: {
     rules: {
