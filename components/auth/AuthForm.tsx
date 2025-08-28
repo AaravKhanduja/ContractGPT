@@ -18,6 +18,7 @@ interface AuthFormProps {
 export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
   const { signIn, signUp, signInWithGoogle } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,24 +36,31 @@ export default function AuthForm({ mode }: AuthFormProps) {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       if (isLogin) {
         const { error } = await signIn(formData.email, formData.password);
         if (error) throw new Error(error.message);
-        router.push('/contracts');
+
+        // Simple redirect after successful sign in
+        window.location.href = '/';
       } else {
         if (formData.password !== formData.confirmPassword) {
           throw new Error('Passwords do not match');
         }
+
         const { error } = await signUp(formData.email, formData.password);
         if (error) throw new Error(error.message);
 
-        // Show success message for email verification
-        setError(''); // Clear any previous errors
-        setSuccess('Please check your email to verify your account before signing in.');
+        // Show verification message and redirect to sign in
+        setSuccess('Account created successfully! Please check your email to verify your account.');
         setLoading(false);
-        // Don't redirect - show verification message instead
+
+        // Redirect to sign in after a short delay
+        setTimeout(() => {
+          router.push('/auth/signin');
+        }, 3000);
         return;
       }
     } catch (err) {
@@ -69,7 +77,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     try {
       const { error } = await signInWithGoogle();
       if (error) throw new Error(error.message);
-      router.push('/contracts');
+      window.location.href = '/';
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -124,8 +132,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               {/* Success Message */}
               {success && (
-                <div className="mb-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                  <p className="text-sm text-green-600">{success}</p>
+                <div className="mb-4 p-3 bg-success/10 border border-success/20 rounded-lg">
+                  <p className="text-sm text-success">{success}</p>
                 </div>
               )}
 
