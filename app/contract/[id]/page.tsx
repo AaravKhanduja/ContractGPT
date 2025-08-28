@@ -20,6 +20,7 @@ export default function ContractPage() {
   const params = useParams();
   const router = useRouter();
   const { user, loading } = useAuth();
+  const isDevMode = process.env.NODE_ENV === 'development';
   const [contract, setContract] = useState<ContractData | null>(null);
   const [originalPrompt, setOriginalPrompt] = useState('');
   const [copied, setCopied] = useState(false);
@@ -28,53 +29,58 @@ export default function ContractPage() {
 
   useEffect(() => {
     const contractId = params.id as string;
-    const storedPrompt = localStorage.getItem(`contract-${contractId}-prompt`);
-    const existing = localStorage.getItem(`contract-${contractId}`);
+    const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
+    const storedPrompt = localStorage.getItem(`${envPrefix}contract-${contractId}-prompt`);
+    const existing = localStorage.getItem(`${envPrefix}contract-${contractId}`);
 
     if (!storedPrompt) return;
     setOriginalPrompt(storedPrompt);
 
-    const fetchContract = async () => {
+    // Load existing contract from localStorage instead of regenerating
+    if (existing) {
       try {
-        const res = await fetch('/api/generate-contract', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: storedPrompt }),
-        });
-
-        const data = await res.json();
-
-        if (data.contract) {
-          let title = 'Generated Contract';
-
-          if (existing) {
-            try {
-              const parsed = JSON.parse(existing);
-              if (parsed.title) title = parsed.title;
-            } catch (err) {
-              // Could not parse existing contract, using default title
-            }
-          }
-
-          const contractData = {
-            title,
-            type: 'Service Agreement',
-            content: data.contract,
-          };
-
-          setContract(contractData);
-          setEditedContent(data.contract);
-
-          localStorage.setItem(`contract-${contractId}`, JSON.stringify(contractData));
-        } else {
-          console.error('❌ No contract in response', data);
-        }
-      } catch (error) {
-        console.error('❌ Failed to fetch contract:', error);
+        const parsed = JSON.parse(existing);
+        setContract(parsed);
+        setEditedContent(parsed.content);
+      } catch (err) {
+        console.error('Failed to parse existing contract:', err);
       }
-    };
+    } else {
+      // Only generate if no existing contract is found
+      const fetchContract = async () => {
+        try {
+          const res = await fetch('/api/generate-contract', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: storedPrompt }),
+          });
 
-    fetchContract();
+          const data = await res.json();
+
+          if (data.contract) {
+            const contractData = {
+              title: 'Generated Contract',
+              type: 'Service Agreement',
+              content: data.contract,
+            };
+
+            setContract(contractData);
+            setEditedContent(data.contract);
+
+            localStorage.setItem(
+              `${envPrefix}contract-${contractId}`,
+              JSON.stringify(contractData)
+            );
+          } else {
+            console.error('❌ No contract in response', data);
+          }
+        } catch (error) {
+          console.error('❌ Failed to fetch contract:', error);
+        }
+      };
+
+      fetchContract();
+    }
   }, [params.id]);
 
   const handleCopy = async () => {
@@ -94,7 +100,8 @@ export default function ContractPage() {
       const updatedContract = { ...contract, content: editedContent };
       setContract(updatedContract);
       const contractId = params.id as string;
-      localStorage.setItem(`contract-${contractId}`, JSON.stringify(updatedContract));
+      const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
+      localStorage.setItem(`${envPrefix}contract-${contractId}`, JSON.stringify(updatedContract));
       setIsEditing(false);
     }
   };
@@ -141,7 +148,7 @@ export default function ContractPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation isAuthenticated={!!user} />
+      <Navigation isAuthenticated={isDevMode || !!user} />
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
