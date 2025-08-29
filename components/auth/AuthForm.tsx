@@ -73,12 +73,21 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
+    console.log('Google login button clicked');
 
     try {
       const { error } = await signInWithGoogle();
-      if (error) throw new Error(error.message);
-      window.location.href = '/';
+      console.log('SignInWithGoogle result:', { error });
+
+      if (error) {
+        console.error('Google login error:', error);
+        throw new Error(error.message);
+      }
+
+      console.log('Google login successful');
+      // Let Supabase handle the redirect automatically
     } catch (err) {
+      console.error('Google login exception:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
