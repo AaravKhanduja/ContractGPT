@@ -78,7 +78,7 @@ This will automatically:
 ### AI Configuration
 
 - **Development**: Uses Ollama with llama3.2:3b model (free, local)
-- **Production**: Uses OpenAI GPT-4 API (paid, cloud-based)
+- **Production**: Uses OpenAI GPT-4 API (cloud-based)
 - **No Mock Contracts**: All contract generation uses real AI models
 
 ### Development Mode (Default)
@@ -97,6 +97,29 @@ This will automatically:
 - **Data Storage**: Persistent database with user isolation
 - **Deployment**: Vercel, Netlify, or custom server
 - **Perfect for**: Production applications with real users
+
+### OAuth Setup
+
+The app supports Google OAuth through Supabase. To enable:
+
+1. **Google Console Setup**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing
+   - Enable Google+ API
+   - Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
+   - Set redirect URI to: `https://xtrqrnwheomcoamjoopz.supabase.co/auth/v1/callback`
+
+2. **Supabase Setup**:
+   - Go to Supabase Dashboard → Authentication → Providers
+   - Enable Google provider
+   - Enter your Google OAuth Client ID and Client Secret
+   - Save configuration
+
+3. **Environment Variables**:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
 ## 🛠️ Available Scripts
 
@@ -170,13 +193,15 @@ contract-gpt/
 
 ### Environment Variables
 
-| Variable         | Description                            | Required | Development | Production |
-| ---------------- | -------------------------------------- | -------- | ----------- | ---------- |
-| `OPENAI_API_KEY` | OpenAI API key for contract generation | ❌       | ❌          | ✅         |
+| Variable                        | Description                            | Required | Development | Production |
+| ------------------------------- | -------------------------------------- | -------- | ----------- | ---------- |
+| `OPENAI_API_KEY`                | OpenAI API key for contract generation | ❌       | ❌          | ✅         |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL                   | ❌       | ❌          | ✅         |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key                 | ❌       | ❌          | ✅         |
 
-**Development Mode**: No API keys required. Uses Ollama (free, local AI model).
+**Development Mode**: No API keys required. Uses Ollama (free, local AI model) and localStorage for auth.
 
-**Production Mode**: Requires OpenAI API key for contract generation.
+**Production Mode**: Requires OpenAI API key and Supabase credentials for full functionality.
 
 **Optional Supabase Integration**: If you want to use Supabase for authentication, add these variables:
 
