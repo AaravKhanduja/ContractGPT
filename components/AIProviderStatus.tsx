@@ -45,14 +45,14 @@ export default function AIProviderStatus() {
           name: 'OpenAI',
           color: 'bg-blue-100 text-blue-800 border-blue-200',
           icon: '🔵',
-          description: 'Cloud (Paid)',
+          description: 'Cloud',
         };
       case 'anthropic':
         return {
           name: 'Anthropic',
           color: 'bg-purple-100 text-purple-800 border-purple-200',
           icon: '🟣',
-          description: 'Cloud (Paid)',
+          description: 'Cloud',
         };
       case 'mock':
         return {
