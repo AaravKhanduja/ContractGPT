@@ -153,7 +153,8 @@ export default function ContractEditor({
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-gray max-w-none leading-relaxed focus:outline-none min-h-[600px] p-4',
+        class:
+          'prose prose-lg max-w-none leading-relaxed focus:outline-none min-h-[600px] p-6 bg-white',
       },
     },
     immediatelyRender: false,
@@ -184,9 +185,9 @@ export default function ContractEditor({
   };
 
   return (
-    <div className="border rounded-lg bg-background">
+    <div className="border border-gray-200 rounded-lg bg-white shadow-sm">
       {/* Toolbar */}
-      <div className="border-b p-2 flex items-center gap-2 flex-wrap bg-muted/50">
+      <div className="border-b border-gray-200 p-3 flex items-center gap-2 flex-wrap bg-gray-50">
         <Button
           variant="ghost"
           size="sm"
@@ -212,7 +213,7 @@ export default function ContractEditor({
           <Heading3 className="h-4 w-4" />
         </Button>
 
-        <div className="w-px h-6 bg-border mx-2" />
+        <div className="w-px h-6 bg-gray-300 mx-2" />
 
         <Button
           variant="ghost"
@@ -233,7 +234,7 @@ export default function ContractEditor({
       </div>
 
       {/* Editor */}
-      <div className="p-4">
+      <div className="p-0">
         <EditorContent editor={editor} />
       </div>
     </div>

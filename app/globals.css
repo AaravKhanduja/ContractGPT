@@ -204,3 +204,189 @@
   font-family: monospace !important;
   color: #374151 !important;
 }
+
+/* Contract-specific styles */
+.contract-viewer {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.6;
+}
+
+.contract-viewer h1 {
+  color: #1f2937;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.contract-viewer h2 {
+  color: #374151;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.contract-viewer h3 {
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.contract-viewer p {
+  color: #374151;
+  line-height: 1.7;
+}
+
+.contract-viewer li {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.contract-viewer strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.contract-viewer em {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Signature field styles */
+.signature-field {
+  transition: all 0.2s ease-in-out;
+}
+
+.signature-field:hover {
+  transform: translateY(-1px);
+}
+
+.signature-field label {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Enhanced TipTap styles for better contract editing */
+.ProseMirror {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: #374151;
+  line-height: 1.7;
+}
+
+.ProseMirror h1 {
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  border-bottom: 2px solid #3b82f6 !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.ProseMirror h2 {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+  position: relative !important;
+  padding-left: 1rem !important;
+}
+
+.ProseMirror h2::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 4px !important;
+  height: 1.5rem !important;
+  background-color: #3b82f6 !important;
+  border-radius: 2px !important;
+}
+
+.ProseMirror h3 {
+  color: #4b5563 !important;
+  font-weight: 600 !important;
+  position: relative !important;
+  padding-left: 0.75rem !important;
+}
+
+.ProseMirror h3::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 3px !important;
+  height: 1rem !important;
+  background-color: #9ca3af !important;
+  border-radius: 1.5px !important;
+}
+
+.ProseMirror p {
+  color: #374151 !important;
+  line-height: 1.7 !important;
+  margin-bottom: 1.25rem !important;
+}
+
+.ProseMirror ul {
+  margin-bottom: 1.25rem !important;
+  padding-left: 1.5rem !important;
+}
+
+.ProseMirror li {
+  color: #374151 !important;
+  line-height: 1.6 !important;
+  margin-bottom: 0.5rem !important;
+  position: relative !important;
+  padding-left: 0.5rem !important;
+}
+
+.ProseMirror li::before {
+  content: '•' !important;
+  color: #3b82f6 !important;
+  font-weight: bold !important;
+  position: absolute !important;
+  left: -1rem !important;
+}
+
+.ProseMirror strong {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+}
+
+.ProseMirror em {
+  color: #6b7280 !important;
+  font-style: italic !important;
+}
+
+.ProseMirror hr {
+  margin: 2rem 0 !important;
+  border: none !important;
+  border-top: 1px solid #e5e7eb !important;
+  background: linear-gradient(to right, transparent, #d1d5db, transparent) !important;
+}
+
+.ProseMirror blockquote {
+  margin: 1.5rem 0 !important;
+  padding: 1rem 1.5rem !important;
+  border-left: 4px solid #3b82f6 !important;
+  background-color: #eff6ff !important;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  color: #374151 !important;
+  font-style: italic !important;
+}
+
+.ProseMirror code {
+  background-color: #f3f4f6 !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.25rem !important;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+}
