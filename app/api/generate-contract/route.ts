@@ -20,7 +20,7 @@ EXACT MARKDOWN FORMAT REQUIRED:
 ## Services and Deliverables
 - [List specific deliverables based on the request]
 - [Include scope of work]
-- [Add any assumptions if details are vague]
+- [If details are vague, state explicit assumptions (e.g., page counts, number of revisions) to avoid scope creep]
 
 ## Payment Terms
 - **Total Fee:** [Amount]
@@ -31,12 +31,16 @@ EXACT MARKDOWN FORMAT REQUIRED:
 ## Timeline
 - **Project Kickoff:** [Start date or conditions]
 - **Delivery Timeline:** [Expected completion time]
-- **Revision Policy:** [Revision turnaround and limits]
+- **Revision Policy:** [Number of revisions included, turnaround time, and how extra revisions are billed]
+- **Acceptance Criteria:** [How completion is defined and when deliverables are deemed accepted]
+- **Post-Launch Support:** [What, if any, maintenance or bug-fixing period is included]
 
 ## Terms and Conditions
 - **Confidentiality:** Both parties agree to maintain confidentiality
 - **Intellectual Property:** [IP ownership terms]
 - **Termination:** [Termination conditions]
+- **Liability Limitation:** Service Provider’s liability is capped at fees paid under this Agreement
+- **Portfolio Rights:** Service Provider may display completed work in their portfolio unless Client objects in writing
 - **Governing Law:** [Applicable law and jurisdiction]
 
 ## Signatures
@@ -44,7 +48,7 @@ EXACT MARKDOWN FORMAT REQUIRED:
 - **Service Provider Signature:** [Service Provider Name]
 - **Date:** [Date]
 
-DO NOT use emojis, special characters, or any formatting other than markdown. Use ONLY #, ##, -, and ** for formatting.`;
+IMPORTANT: Do not output anything outside the markdown contract (no explanations, no notes). Use ONLY #, ##, -, and ** for formatting.`;
 
 // Function to post-process and fix markdown formatting
 function fixMarkdownFormatting(content: string): string {
