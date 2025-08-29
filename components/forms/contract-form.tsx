@@ -34,20 +34,40 @@ export default function ContractForm() {
         throw new Error('No contract content received');
       }
 
-      const contractId = 'contract-' + Date.now();
-      const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
+      if (process.env.NODE_ENV === 'development') {
+        // Development: Use localStorage only
+        const contractId = 'contract-' + Date.now();
+        localStorage.setItem(
+          `dev-contract-${contractId}`,
+          JSON.stringify({
+            title: contractName,
+            type: 'Service Agreement',
+            content: data.contract,
+            createdAt: new Date().toISOString(),
+          })
+        );
+        localStorage.setItem(`dev-contract-${contractId}-prompt`, input);
+        router.push(`/contract/${contractId}`);
+      } else {
+        // Production: Save to Supabase only (no localStorage)
+        const saveResponse = await fetch('/api/contracts/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: contractName,
+            content: data.contract,
+            prompt: input,
+          }),
+        });
 
-      localStorage.setItem(
-        `${envPrefix}contract-${contractId}`,
-        JSON.stringify({
-          title: contractName,
-          type: 'Service Agreement',
-          content: data.contract,
-        })
-      );
-      localStorage.setItem(`${envPrefix}contract-${contractId}-prompt`, input);
+        const saveData = await saveResponse.json();
 
-      router.push(`/contract/${contractId}`);
+        if (!saveResponse.ok) {
+          throw new Error(saveData.error || 'Failed to save contract');
+        }
+
+        router.push(`/contract/${saveData.contract.id}`);
+      }
     } catch (error) {
       alert('Failed to generate contract. Please try again.');
     } finally {
