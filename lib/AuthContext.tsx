@@ -92,6 +92,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         data: { subscription },
       } = supabase.auth.onAuthStateChange(async (event: string, session: Session | null) => {
         setUser(session?.user ?? null);
+
+        // Redirect to home page after successful sign in, but only if we're on an auth page
+        if (
+          event === 'SIGNED_IN' &&
+          session?.user &&
+          window.location.pathname.startsWith('/auth/')
+        ) {
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 100);
+        }
       });
 
       subscriptionRef.current = subscription;
@@ -221,9 +232,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Production mode: use Supabase Google OAuth
       try {
         const supabase = getSupabaseClient();
+
+        // Check if we need to force account selection (after sign out)
+        const forceAccountSelection = localStorage.getItem('force-account-selection') === 'true';
+
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
+          options: forceAccountSelection
+            ? {
+                queryParams: {
+                  prompt: 'select_account', // Force Google to show account selection
+                },
+              }
+            : undefined,
         });
+
+        // Clear the flag after OAuth initiation
+        if (forceAccountSelection) {
+          localStorage.removeItem('force-account-selection');
+        }
 
         if (error) {
           return { error: new Error(error.message) };
@@ -248,8 +275,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const supabase = getSupabaseClient();
         await supabase.auth.signOut();
         setUser(null);
+
+        // Clear browser cache and storage to force fresh Google account selection
+        if (typeof window !== 'undefined') {
+          // Clear localStorage
+          localStorage.clear();
+          // Clear sessionStorage
+          sessionStorage.clear();
+          // Clear cookies (except essential ones)
+          document.cookie.split(';').forEach(function (c) {
+            document.cookie = c
+              .replace(/^ +/, '')
+              .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+          });
+
+          // Set a flag to force account selection on next OAuth
+          localStorage.setItem('force-account-selection', 'true');
+        }
       } catch (error) {
-        console.error('Failed to sign out:', error);
+        // Silent fail for production
       }
     }
   }, [isDevMode]);
