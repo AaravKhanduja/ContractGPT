@@ -11,7 +11,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "deploy:check": "bash scripts/deploy.sh",
+    "dev:setup": "bash scripts/dev-deploy.sh",
+    "dev:start": "npm run dev",
+    "prod:deploy": "bash scripts/prod-deploy.sh",
     "db:setup": "echo 'Run scripts/setup-database.sql in your Supabase SQL editor'",
     "env:validate": "node -e \"require('./lib/env').validateEnv()\"",
     "rls:check": "bash scripts/check-rls-status.sh"
