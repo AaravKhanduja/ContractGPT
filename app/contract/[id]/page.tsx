@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Download, Edit, Save, X } from 'lucide-react';
+import { Download, Edit, Save, X, RefreshCw } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Navigation from '@/components/navigation';
 import { generateContractPDF } from '@/utils/pdf-utils';
 import ContractEditor from '@/components/contract/ContractEditor';
+import ContractViewer from '@/components/contract/ContractViewer';
 import { useAuth } from '@/lib/AuthContext';
 
 interface ContractData {
@@ -26,6 +27,67 @@ export default function ContractPage() {
   const [copied, setCopied] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+
+  const fetchContract = async (forceRegenerate = false) => {
+    const contractId = params.id as string;
+    const envPrefix = process.env.NODE_ENV === 'development' ? 'dev-' : 'prod-';
+    const storedPrompt = localStorage.getItem(`${envPrefix}contract-${contractId}-prompt`);
+
+    if (!storedPrompt) return;
+
+    // Clear existing contract if forcing regeneration
+    if (forceRegenerate) {
+      localStorage.removeItem(`${envPrefix}contract-${contractId}`);
+    }
+
+    try {
+      setIsRegenerating(true);
+      setError(null);
+
+      const endpoint =
+        process.env.NODE_ENV === 'development'
+          ? '/api/generate-contract-dev'
+          : '/api/generate-contract';
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: storedPrompt }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+
+      if (data.contract) {
+        const contractData = {
+          title: 'Generated Contract',
+          type: 'Service Agreement',
+          content: data.contract,
+        };
+
+        setContract(contractData);
+        setEditedContent(data.contract);
+
+        localStorage.setItem(`${envPrefix}contract-${contractId}`, JSON.stringify(contractData));
+      } else {
+        console.error('❌ No contract in response', data);
+        setError('No contract content received');
+      }
+    } catch (error) {
+      console.error('❌ Failed to fetch contract:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Failed to generate contract');
+      }
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
 
   useEffect(() => {
     const contractId = params.id as string;
@@ -47,38 +109,6 @@ export default function ContractPage() {
       }
     } else {
       // Only generate if no existing contract is found
-      const fetchContract = async () => {
-        try {
-          const res = await fetch('/api/generate-contract', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: storedPrompt }),
-          });
-
-          const data = await res.json();
-
-          if (data.contract) {
-            const contractData = {
-              title: 'Generated Contract',
-              type: 'Service Agreement',
-              content: data.contract,
-            };
-
-            setContract(contractData);
-            setEditedContent(data.contract);
-
-            localStorage.setItem(
-              `${envPrefix}contract-${contractId}`,
-              JSON.stringify(contractData)
-            );
-          } else {
-            console.error('❌ No contract in response', data);
-          }
-        } catch (error) {
-          console.error('❌ Failed to fetch contract:', error);
-        }
-      };
-
       fetchContract();
     }
   }, [params.id]);
@@ -175,6 +205,15 @@ export default function ContractPage() {
             </>
           ) : (
             <>
+              <Button
+                onClick={() => fetchContract(true)}
+                disabled={isRegenerating}
+                variant="outline"
+                className="hover:bg-accent"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRegenerating ? 'animate-spin' : ''}`} />
+                {isRegenerating ? 'Regenerating...' : 'Regenerate'}
+              </Button>
               <Button variant="outline" onClick={handleEdit} className="hover:bg-accent">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
