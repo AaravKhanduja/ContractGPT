@@ -60,7 +60,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isDevMode = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
-    console.log('AuthContext: isDevMode =', isDevMode);
     if (isDevMode) {
       // Development mode: check localStorage
       const storedUser = localStorage.getItem('dev-user');
@@ -78,16 +77,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const supabase = getSupabaseClient();
 
       // Get initial session
-      console.log('AuthContext: Getting initial session...');
       supabase.auth
         .getSession()
         .then(({ data: { session } }: { data: { session: Session | null } }) => {
-          console.log('AuthContext: Session result:', session?.user?.email || 'no session');
           setUser(session?.user ?? null);
           setLoading(false);
         })
         .catch((error: unknown) => {
-          console.error('AuthContext: Error getting session:', error);
           setLoading(false);
         });
 
