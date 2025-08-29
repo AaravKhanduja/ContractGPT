@@ -129,7 +129,7 @@ show_deployment_instructions() {
     echo ""
     echo -e "${BLUE}[INFO]${NC} 📋 Configuration Summary:"
     echo -e "${BLUE}[INFO]${NC}   🟢 Development: Ollama (free, local)"
-    echo -e "${BLUE}[INFO]${NC}   🔴 Production: OpenAI (paid, cloud)"
+    echo -e "${BLUE}[INFO]${NC}   🔴 Production: OpenAI (cloud)"
     echo ""
     echo -e "${YELLOW}[WARNING]${NC} Make sure to set NODE_ENV=production in your deployment environment"
 }

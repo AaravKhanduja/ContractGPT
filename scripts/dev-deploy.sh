@@ -87,7 +87,7 @@ setup_env() {
         echo -e "${YELLOW}[WARNING]${NC} .env.local already exists"
         echo -e "${BLUE}[INFO]${NC} The app will automatically use:"
         echo -e "${BLUE}[INFO]${NC}   - Ollama in development (free)"
-        echo -e "${BLUE}[INFO]${NC}   - OpenAI in production (paid)"
+        echo -e "${BLUE}[INFO]${NC}   - OpenAI in production"
     else
         echo -e "${BLUE}[INFO]${NC} Creating .env.local file..."
         cat > .env.local << EOF
@@ -175,7 +175,7 @@ main() {
     echo ""
     echo -e "${BLUE}[INFO]${NC} 📋 Configuration Summary:"
     echo -e "${BLUE}[INFO]${NC}   🟢 Development: Ollama (free, local)"
-    echo -e "${BLUE}[INFO]${NC}   🔴 Production: OpenAI (paid, cloud)"
+    echo -e "${BLUE}[INFO]${NC}   🔴 Production: OpenAI (cloud)"
     echo ""
     
     # Start development server
