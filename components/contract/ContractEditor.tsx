@@ -6,8 +6,15 @@ import Heading from '@tiptap/extension-heading';
 import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
 import { Button } from '@/components/ui/button';
-import { useEffect } from 'react';
-import { Bold as BoldIcon, Italic as ItalicIcon, Heading1, Heading2, Heading3 } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import {
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
+  Heading1,
+  Heading2,
+  Heading3,
+  Type,
+} from 'lucide-react';
 
 interface ContractEditorProps {
   content: string;
@@ -133,6 +140,8 @@ export default function ContractEditor({
   onSave,
   onCancel,
 }: ContractEditorProps) {
+  const updateTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -148,21 +157,33 @@ export default function ContractEditor({
     ],
     content: convertMarkdownToHtml(content),
     onUpdate: ({ editor }) => {
-      const markdown = convertHtmlToMarkdown(editor.getHTML());
-      onChange(markdown);
+      // Clear existing timeout
+      if (updateTimeoutRef.current) {
+        clearTimeout(updateTimeoutRef.current);
+      }
+
+      // Debounce the update to prevent cursor jumping
+      updateTimeoutRef.current = setTimeout(() => {
+        const markdown = convertHtmlToMarkdown(editor.getHTML());
+        onChange(markdown);
+      }, 100);
     },
     editorProps: {
       attributes: {
         class:
-          'prose prose-lg max-w-none leading-relaxed focus:outline-none min-h-[600px] p-6 bg-white',
+          'prose prose-lg max-w-none leading-relaxed focus:outline-none min-h-[600px] max-h-[800px] overflow-y-auto p-6 bg-white',
       },
+    },
+    enableCoreExtensions: true,
+    parseOptions: {
+      preserveWhitespace: 'full',
     },
     immediatelyRender: false,
   });
 
-  // Update editor content when content prop changes
+  // Update editor content when content prop changes (only on initial load)
   useEffect(() => {
-    if (editor && content) {
+    if (editor && content && !editor.getHTML()) {
       const htmlContent = convertMarkdownToHtml(content);
       editor.commands.setContent(htmlContent);
     }
@@ -182,6 +203,10 @@ export default function ContractEditor({
 
   const toggleItalic = () => {
     editor.chain().focus().toggleItalic().run();
+  };
+
+  const setNormalText = () => {
+    editor.chain().focus().setParagraph().run();
   };
 
   return (
@@ -211,6 +236,14 @@ export default function ContractEditor({
           className={editor.isActive('heading', { level: 3 }) ? 'bg-accent' : ''}
         >
           <Heading3 className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={setNormalText}
+          className={editor.isActive('paragraph') ? 'bg-accent' : ''}
+        >
+          <Type className="h-4 w-4" />
         </Button>
 
         <div className="w-px h-6 bg-gray-300 mx-2" />
