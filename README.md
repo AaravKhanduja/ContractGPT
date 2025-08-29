@@ -4,17 +4,35 @@ AI-powered contract generation tool that transforms client requests into profess
 
 ## ✨ Features
 
-- **AI Contract Generation**: Transform client requests into professional contracts using OpenAI GPT-4
+- **AI Contract Generation**: Transform client requests into professional contracts using OpenAI GPT-4 (production) or Ollama (development)
 - **Rich Text Editor**: Notion-style editing with TipTap for contract customization
-- **PDF Export**: Download contracts as professionally formatted PDFs
+- **PDF Export**: Download contracts as professionally formatted PDFs with enhanced styling
 - **Authentication**: Secure user authentication with Supabase Auth
 - **Data Persistence**: Supabase database with Row Level Security (RLS)
-- **Modern UI**: Beautiful, responsive interface with glass morphism effects
-- **Development Mode**: localStorage fallback for development without database setup
+- **Modern UI**: Beautiful, responsive interface with enhanced contract styling
+- **Environment-Specific AI**: Ollama for free development, OpenAI for production
+- **Real AI Generation**: No mock contracts - always uses real AI models
 
 ## 🚀 Quick Start
 
-### For Contributors (Development Mode)
+### One Command Setup (Recommended)
+
+```bash
+# Clone and setup everything in one command
+git clone https://github.com/AaravKhanduja/ContractGPT.git
+cd contract-gpt
+npm run dev:setup
+```
+
+This will automatically:
+
+- Install Ollama (free AI model for development)
+- Pull the llama3.2:3b model
+- Install all dependencies
+- Create environment configuration
+- Start the development server
+
+### Manual Setup (Alternative)
 
 1. **Clone the repository**
 
@@ -29,19 +47,22 @@ AI-powered contract generation tool that transforms client requests into profess
    npm install
    ```
 
-3. **Set up environment variables (Optional for development)**
+3. **Set up environment variables**
+
+   For development (Ollama):
 
    ```bash
    cp .env.example .env.local
+   # No API keys needed for development - uses Ollama
    ```
 
-   For development, you only need:
+   For production (OpenAI):
 
    ```env
    OPENAI_API_KEY=your_openai_api_key_here
+   SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_ANON_KEY=your_supabase_anon_key_here
    ```
-
-   **Note**: Supabase is optional for development. The app will use localStorage for authentication and data storage when Supabase isn't configured.
 
 4. **Run the development server**
 
@@ -52,14 +73,17 @@ AI-powered contract generation tool that transforms client requests into profess
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-### For Production Deployment
-
-Follow the full setup guide below to configure Supabase for production use.
-
 ## 🏗️ Architecture
+
+### AI Configuration
+
+- **Development**: Uses Ollama with llama3.2:3b model (free, local)
+- **Production**: Uses OpenAI GPT-4 API (paid, cloud-based)
+- **No Mock Contracts**: All contract generation uses real AI models
 
 ### Development Mode (Default)
 
+- **AI Provider**: Ollama (local, free)
 - **Authentication**: Simulated with localStorage (no setup required)
 - **Data Storage**: localStorage for contracts and user data
 - **No Database Required**: Works out of the box for contributors
@@ -67,6 +91,7 @@ Follow the full setup guide below to configure Supabase for production use.
 
 ### Production Mode (With Supabase)
 
+- **AI Provider**: OpenAI GPT-4
 - **Authentication**: Supabase Auth with Google OAuth
 - **Database**: Supabase PostgreSQL with Row Level Security (RLS)
 - **Data Storage**: Persistent database with user isolation
@@ -78,8 +103,13 @@ Follow the full setup guide below to configure Supabase for production use.
 ```bash
 # Development
 npm run dev          # Start development server
+npm run dev:setup    # Setup development environment (Ollama + dependencies)
+npm run dev:start    # Start development server
+
+# Production
 npm run build        # Build for production
 npm run start        # Start production server
+npm run prod:deploy  # Prepare for production deployment
 
 # Testing
 npm run test         # Run tests
@@ -90,19 +120,21 @@ npm run test:run     # Run tests once
 npm run lint         # Run ESLint
 npm run format       # Format code with Prettier
 
-# Deployment
-npm run deploy:check # Check deployment readiness
+# Database & Security
+npm run rls:check    # Check Row Level Security status
 ```
 
 ## 🧱 Tech Stack
 
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
 - **UI Components**: shadcn/ui, Lucide React icons
-- **Rich Text Editor**: TipTap with custom extensions
+- **Rich Text Editor**: TipTap with custom extensions and enhanced styling
 - **Authentication**: Supabase Auth with SSR support
 - **Database**: Supabase PostgreSQL with RLS
-- **AI Integration**: OpenAI GPT-4 API
-- **PDF Generation**: jsPDF with custom formatting
+- **AI Integration**:
+  - Development: Ollama (llama3.2:3b) - free, local
+  - Production: OpenAI GPT-4 API
+- **PDF Generation**: jsPDF with professional formatting and styling
 - **Testing**: Vitest, React Testing Library
 - **Deployment**: Vercel-ready with production optimizations
 
@@ -112,21 +144,25 @@ npm run deploy:check # Check deployment readiness
 contract-gpt/
 ├── app/                    # Next.js App Router pages
 │   ├── api/               # API routes
+│   │   ├── generate-contract/      # Production OpenAI API
+│   │   └── generate-contract-dev/  # Development Ollama API
 │   ├── auth/              # Authentication pages
 │   ├── contracts/         # Contract management
-│   └── contract/[id]/     # Individual contract view
+│   └── contract/[id]/     # Individual contract view with regeneration
 ├── components/            # React components
 │   ├── auth/             # Authentication components
-│   ├── contract/         # Contract editor components
+│   ├── contract/         # Contract editor & viewer components
 │   ├── forms/            # Form components
 │   ├── saved-contracts/  # Contract list components
 │   └── ui/               # shadcn/ui components
 ├── lib/                  # Utility libraries
-│   ├── auth.ts           # Authentication utilities
-│   ├── database.ts       # Database service layer
-│   ├── supabase.ts       # Supabase client
-│   └── pdf-utils.ts      # PDF generation utilities
-├── scripts/              # Database and deployment scripts
+├── scripts/              # Deployment and setup scripts
+│   ├── dev-deploy.sh     # Development environment setup
+│   ├── prod-deploy.sh    # Production deployment preparation
+│   └── setup-database.sql # Database setup
+├── utils/                # Utilities
+│   ├── ai-config.ts      # AI provider configuration
+│   └── pdf-utils.ts      # Enhanced PDF generation
 └── test/                 # Test setup and utilities
 ```
 
@@ -134,13 +170,13 @@ contract-gpt/
 
 ### Environment Variables
 
-| Variable         | Description                            | Required | Development |
-| ---------------- | -------------------------------------- | -------- | ----------- |
-| `OPENAI_API_KEY` | OpenAI API key for contract generation | ✅       | ✅          |
+| Variable         | Description                            | Required | Development | Production |
+| ---------------- | -------------------------------------- | -------- | ----------- | ---------- |
+| `OPENAI_API_KEY` | OpenAI API key for contract generation | ❌       | ❌          | ✅         |
 
-**Development Mode**: Only `OPENAI_API_KEY` is required. The app will use localStorage for authentication and data storage.
+**Development Mode**: No API keys required. Uses Ollama (free, local AI model).
 
-**Production Mode**: Uses your existing authentication system in `app/auth/`.
+**Production Mode**: Requires OpenAI API key for contract generation.
 
 **Optional Supabase Integration**: If you want to use Supabase for authentication, add these variables:
 
@@ -149,30 +185,50 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```
 
+### AI Provider Configuration
+
+The app automatically selects the appropriate AI provider based on the environment:
+
+- **Development (`NODE_ENV=development`)**: Uses Ollama with llama3.2:3b
+- **Production (`NODE_ENV=production`)**: Uses OpenAI GPT-4
+
 ### Security Features
 
 #### Development Mode
 
+- **Local AI**: Ollama runs locally, no external API calls
 - **Local Storage**: Simulated authentication for easy development
 - **No Database**: All data stored locally in browser
 - **Zero Setup**: Perfect for contributors and testing
 
 #### Production Mode
 
+- **Cloud AI**: OpenAI GPT-4 for high-quality contract generation
 - **Existing Auth System**: Uses your current authentication setup
 - **No Client-Side Secrets**: No sensitive data exposed to browser
 - **Simple Integration**: Works with your existing auth pages
 
-### Development vs Production
-
-The app automatically detects your environment:
-
-- **Development**: Uses localStorage for data persistence
-- **Production**: Uses Supabase database with authentication
-
 ## 🤝 Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Development Workflow
+
+1. **Setup Development Environment**:
+
+   ```bash
+   npm run dev:setup
+   ```
+
+2. **Start Development Server**:
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Make Changes**: The app uses Ollama for free AI generation during development
+
+4. **Test**: All changes are tested with real AI generation (no mocks)
 
 ## 🚀 Deployment
 
@@ -185,7 +241,8 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 # 2. Set environment variables in Vercel dashboard
 # 3. Deploy automatically on push to main
 
-# Environment variables needed:
+# Environment variables needed for production:
+NODE_ENV=production
 OPENAI_API_KEY=your_openai_api_key
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -202,7 +259,21 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 
 ### Production Setup
 
-#### 1. Supabase Database
+#### 1. Prepare for Production
+
+```bash
+# Run production deployment script
+npm run prod:deploy
+```
+
+This script will:
+
+- Install production dependencies
+- Run tests and linting
+- Build the application
+- Verify environment variables
+
+#### 2. Supabase Database (Optional)
 
 ```sql
 -- Run in Supabase SQL Editor
@@ -213,7 +284,7 @@ ALTER TABLE contracts ENABLE ROW LEVEL SECURITY;
 -- Create RLS policies (see scripts/setup-database.sql)
 ```
 
-#### 2. Environment Variables
+#### 3. Environment Variables
 
 ```bash
 # Required for production
@@ -227,20 +298,13 @@ NEXTAUTH_SECRET=your-256-bit-secret
 NEXTAUTH_URL=https://your-domain.vercel.app
 ```
 
-#### 3. Security Configuration
-
-- **Row Level Security (RLS)**: Enabled on all database tables
-- **Security Headers**: Configured in next.config.ts
-- **Rate Limiting**: Implemented on API routes
-- **Input Validation**: All user inputs sanitized
-
 ### Monitoring & Performance
 
 #### Health Checks
 
 ```bash
 # Check deployment readiness
-npm run deploy:check
+npm run prod:deploy
 
 # Verify RLS configuration
 npm run rls:check
@@ -255,24 +319,6 @@ npm audit
 - **Caching**: Static assets and API responses
 - **Database Indexes**: Optimized queries
 - **Bundle Optimization**: Tree shaking and code splitting
-
-### Disaster Recovery
-
-#### Backup Strategy
-
-- **Database**: Automated Supabase backups
-- **Code**: GitHub repository with version control
-- **Environment**: Secure variable storage
-
-#### Recovery Procedures
-
-```bash
-# Rollback deployment
-vercel rollback
-
-# Restore from backup
-# Use Supabase point-in-time recovery
-```
 
 ## 📚 Documentation
 
