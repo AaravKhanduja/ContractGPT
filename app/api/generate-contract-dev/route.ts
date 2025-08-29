@@ -99,50 +99,46 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Production: Only use OpenAI
-    const apiKey = process.env.OPENAI_API_KEY;
-    const model = process.env.OPENAI_MODEL || 'gpt-4';
+    // Development: Only use Ollama
+    const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+    const model = process.env.OLLAMA_MODEL || 'llama3.2:3b';
 
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: 'OpenAI API key not configured for production' },
-        { status: 500 }
-      );
+    try {
+      const response = await fetch(`${ollamaUrl}/api/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: model,
+          prompt: `${SYSTEM_PROMPT}\n\nUser request: ${prompt}\n\nContract:`,
+          stream: false,
+          options: {
+            temperature: 0.7,
+            top_p: 0.9,
+            max_tokens: 2000,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Ollama API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      const content = data.response?.trim();
+
+      if (!content) {
+        throw new Error('Ollama returned empty response');
+      }
+
+      const contract = fixMarkdownFormatting(content);
+
+      return NextResponse.json({ contract });
+    } catch (error) {
+      throw error;
     }
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 0.7,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        `OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`
-      );
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
-
-    if (!content) {
-      throw new Error('OpenAI returned empty response');
-    }
-
-    const contract = fixMarkdownFormatting(content);
-
-    return NextResponse.json({ contract });
   } catch (err) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Internal Server Error' },
