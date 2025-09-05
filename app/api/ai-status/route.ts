@@ -11,7 +11,7 @@ export async function GET() {
       environment: process.env.NODE_ENV,
       endpoint: config.endpoint,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         provider: 'unknown',

@@ -33,7 +33,7 @@ export default function ContractsClient() {
                     ...contract,
                   });
                 }
-              } catch (error) {
+              } catch {
                 // Invalid JSON, removing from localStorage
                 localStorage.removeItem(key);
               }
@@ -69,7 +69,7 @@ export default function ContractsClient() {
             );
             setContracts(formattedContracts);
           }
-        } catch (error) {
+        } catch {
           setError('Failed to load contracts');
         }
       }
@@ -101,7 +101,7 @@ export default function ContractsClient() {
         if (response.ok) {
           setContracts(contracts.filter((c) => c.id !== contractId));
         }
-      } catch (error) {
+      } catch {
         // Handle error silently for now
       }
     }

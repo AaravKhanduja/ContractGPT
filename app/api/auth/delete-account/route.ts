@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     const isDevMode = process.env.NODE_ENV === 'development';
 

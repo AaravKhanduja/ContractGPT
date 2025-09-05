@@ -134,12 +134,7 @@ const convertHtmlToMarkdown = (html: string): string => {
   return lines.join('\n');
 };
 
-export default function ContractEditor({
-  content,
-  onChange,
-  onSave,
-  onCancel,
-}: ContractEditorProps) {
+export default function ContractEditor({ content, onChange }: ContractEditorProps) {
   const updateTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const editor = useEditor({

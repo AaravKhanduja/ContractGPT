@@ -142,7 +142,7 @@ export default function ContractPage() {
           const parsed = JSON.parse(existing);
           setContract(parsed);
           setEditedContent(parsed.content);
-        } catch (err) {
+        } catch {
           // Silent fail for production
         }
       } else {
@@ -255,7 +255,7 @@ export default function ContractPage() {
 
         router.push('/contracts');
       }
-    } catch (error) {
+    } catch {
       setError('Failed to delete contract');
     } finally {
       setIsDeleting(false);

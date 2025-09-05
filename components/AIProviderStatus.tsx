@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAIConfig } from '@/utils/ai-config';
 
 export default function AIProviderStatus() {
   const [provider, setProvider] = useState<string>('');
@@ -13,7 +12,7 @@ export default function AIProviderStatus() {
         const response = await fetch('/api/ai-status');
         const data = await response.json();
         setProvider(data.provider);
-      } catch (error) {
+      } catch {
         setProvider('unknown');
       } finally {
         setIsLoading(false);

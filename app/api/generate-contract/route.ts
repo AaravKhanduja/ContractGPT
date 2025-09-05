@@ -39,14 +39,9 @@ EXACT MARKDOWN FORMAT REQUIRED:
 - **Confidentiality:** Both parties agree to maintain confidentiality
 - **Intellectual Property:** [IP ownership terms]
 - **Termination:** [Termination conditions]
-- **Liability Limitation:** Service Provider’s liability is capped at fees paid under this Agreement
+- **Liability Limitation:** Service Provider's liability is capped at fees paid under this Agreement
 - **Portfolio Rights:** Service Provider may display completed work in their portfolio unless Client objects in writing
 - **Governing Law:** [Applicable law and jurisdiction]
-
-## Signatures
-- **Client Signature:** [Client Name]
-- **Service Provider Signature:** [Service Provider Name]
-- **Date:** [Date]
 
 IMPORTANT: Do not output anything outside the markdown contract (no explanations, no notes). Use ONLY #, ##, -, and ** for formatting.`;
 

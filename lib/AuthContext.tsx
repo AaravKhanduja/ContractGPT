@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(session?.user ?? null);
           setLoading(false);
         })
-        .catch((error: unknown) => {
+        .catch(() => {
           setLoading(false);
         });
 
@@ -146,7 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           setUser(data.user);
           return { error: null };
-        } catch (error) {
+        } catch {
           return { error: new Error('Failed to sign in') };
         }
       }
@@ -199,7 +199,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Production mode: use Supabase
         try {
           const supabase = getSupabaseClient();
-          const { data, error } = await supabase.auth.signUp({
+          const { error } = await supabase.auth.signUp({
             email,
             password,
           });
@@ -209,7 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
 
           return { error: null };
-        } catch (error) {
+        } catch {
           return { error: new Error('Failed to sign up') };
         }
       }
@@ -257,7 +257,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         return { error: null };
-      } catch (error) {
+      } catch {
         return { error: new Error('Failed to sign in with Google') };
       }
     }
@@ -292,7 +292,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Set a flag to force account selection on next OAuth
           localStorage.setItem('force-account-selection', 'true');
         }
-      } catch (error) {
+      } catch {
         // Silent fail for production
       }
     }

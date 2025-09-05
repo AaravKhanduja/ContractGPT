@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         created_at: contract.created_at,
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

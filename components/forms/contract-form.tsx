@@ -68,7 +68,7 @@ export default function ContractForm() {
 
         router.push(`/contract/${saveData.contract.id}`);
       }
-    } catch (error) {
+    } catch {
       alert('Failed to generate contract. Please try again.');
     } finally {
       setLoading(false);
