@@ -97,25 +97,31 @@ export default function AuthForm({ mode }: AuthFormProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex flex-col">
       {/* Header with Logo */}
-      <div className="flex items-center justify-between p-6">
-        <Link href="/" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
-            <FileText className="w-5 h-5 text-primary-foreground" />
+      <div className="flex items-center justify-between p-4 sm:p-6">
+        <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
+            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold text-foreground">ContractGPT</span>
+          <span className="text-lg sm:text-xl font-bold text-foreground">ContractGPT</span>
         </Link>
-        <div className="text-sm text-muted-foreground">AI-Powered Contract Generation</div>
+        <div className="hidden sm:block text-sm text-muted-foreground">
+          AI-Powered Contract Generation
+        </div>
+        <div className="sm:hidden text-xs text-muted-foreground text-right">
+          <div>AI-Powered</div>
+          <div>Contract Gen</div>
+        </div>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           {/* Welcome Section */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
               {isLogin ? 'Welcome back' : 'Get started'}
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-base sm:text-lg">
               {isLogin
                 ? 'Sign in to your account to continue'
                 : 'Create your account to get started'}
@@ -124,7 +130,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
           {/* Auth Card */}
           <Card className="shadow-2xl border-0 bg-card/60 backdrop-blur-xl">
-            <CardContent className="p-8">
+            <CardContent className="p-6 sm:p-8">
               {/* Error Message */}
               {error && (
                 <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
@@ -322,8 +328,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       {/* Footer */}
-      <div className="text-center p-6 text-sm text-muted-foreground border-t border-border/30">
-        <p>
+      <div className="text-center p-4 sm:p-6 text-xs sm:text-sm text-muted-foreground border-t border-border/30">
+        <p className="leading-relaxed">
           By continuing, you agree to our{' '}
           <Link href="/terms" className="text-primary hover:underline font-medium">
             Terms of Service
