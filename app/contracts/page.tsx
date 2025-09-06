@@ -31,7 +31,7 @@ export default function ContractsPage() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">My Contracts</h1>
+              <h1 className="heading-1 text-foreground">My Contracts</h1>
               <p className="text-muted-foreground mt-2">View and manage your generated contracts</p>
             </div>
             <Link href="/">

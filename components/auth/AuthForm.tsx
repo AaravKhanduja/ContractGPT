@@ -102,12 +102,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
           <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
             <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
           </div>
-          <span className="text-lg sm:text-xl font-bold text-foreground">ContractGPT</span>
+          <span className="text-responsive-xl font-bold text-foreground">ContractGPT</span>
         </Link>
-        <div className="hidden sm:block text-sm text-muted-foreground">
+        <div className="hidden sm:block ui-text text-muted-foreground">
           AI-Powered Contract Generation
         </div>
-        <div className="sm:hidden text-xs text-muted-foreground text-right">
+        <div className="sm:hidden caption-text text-muted-foreground text-right">
           <div>AI-Powered</div>
           <div>Contract Gen</div>
         </div>
@@ -118,10 +118,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
         <div className="w-full max-w-md">
           {/* Welcome Section */}
           <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            <h1 className="heading-1 text-foreground mb-2">
               {isLogin ? 'Welcome back' : 'Get started'}
             </h1>
-            <p className="text-muted-foreground text-base sm:text-lg">
+            <p className="text-muted-foreground body-large">
               {isLogin
                 ? 'Sign in to your account to continue'
                 : 'Create your account to get started'}
@@ -134,14 +134,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
               {/* Error Message */}
               {error && (
                 <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <p className="text-sm text-destructive">{error}</p>
+                  <p className="ui-text text-destructive">{error}</p>
                 </div>
               )}
 
               {/* Success Message */}
               {success && (
                 <div className="mb-4 p-3 bg-success/10 border border-success/20 rounded-lg">
-                  <p className="text-sm text-success">{success}</p>
+                  <p className="ui-text text-success">{success}</p>
                 </div>
               )}
 
@@ -149,7 +149,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {!isLogin && (
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-medium text-foreground">
+                    <Label htmlFor="name" className="label-text text-foreground">
                       Full Name
                     </Label>
                     <div className="relative">
@@ -170,7 +170,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="email" className="label-text text-foreground">
                     Email Address
                   </Label>
                   <div className="relative">
@@ -190,7 +190,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="password" className="label-text text-foreground">
                     Password
                   </Label>
                   <div className="relative">
@@ -219,10 +219,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
                 {!isLogin && (
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="confirmPassword"
-                      className="text-sm font-medium text-foreground"
-                    >
+                    <Label htmlFor="confirmPassword" className="label-text text-foreground">
                       Confirm Password
                     </Label>
                     <div className="relative">
@@ -251,13 +248,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
                         className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary focus:ring-2"
                         disabled={localLoading}
                       />
-                      <Label htmlFor="remember" className="text-sm text-muted-foreground">
+                      <Label htmlFor="remember" className="ui-text text-muted-foreground">
                         Remember me
                       </Label>
                     </div>
                     <Link
                       href="/auth/forgot-password"
-                      className="text-sm text-primary hover:underline font-medium"
+                      className="ui-text text-primary hover:underline font-medium"
                     >
                       Forgot password?
                     </Link>
@@ -287,7 +284,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 <div className="absolute inset-0 flex items-center">
                   <Separator className="w-full" />
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
+                <div className="relative flex justify-center caption-text uppercase">
                   <span className="bg-card px-3 text-muted-foreground font-medium">
                     Or continue with
                   </span>
@@ -312,7 +309,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
               {/* Toggle between login/signup */}
               <div className="text-center pt-6">
-                <p className="text-sm text-muted-foreground">
+                <p className="ui-text text-muted-foreground">
                   {isLogin ? "Don't have an account?" : 'Already have an account?'}
                   <Link
                     href={isLogin ? '/auth/signup' : '/auth/signin'}
@@ -328,7 +325,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       {/* Footer */}
-      <div className="text-center p-4 sm:p-6 text-xs sm:text-sm text-muted-foreground border-t border-border/30">
+      <div className="text-center p-4 sm:p-6 body-small text-muted-foreground border-t border-border/30">
         <p className="leading-relaxed">
           By continuing, you agree to our{' '}
           <Link href="/terms" className="text-primary hover:underline font-medium">

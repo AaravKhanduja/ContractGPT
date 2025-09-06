@@ -213,7 +213,7 @@ export default function OptimizedContractForm() {
         <CardContent className="space-y-6">
           {/* Generation Mode Selection */}
           <div className="space-y-3">
-            <Label className="text-base font-semibold">Generation Speed</Label>
+            <Label className="heading-4">Generation Speed</Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {generationModes.map((mode) => {
                 const Icon = mode.icon;
@@ -235,8 +235,8 @@ export default function OptimizedContractForm() {
                       </div>
                       <div className="flex-1">
                         <div className="font-medium">{mode.name}</div>
-                        <div className="text-sm text-muted-foreground">{mode.description}</div>
-                        <Badge variant="secondary" className="mt-1 text-xs">
+                        <div className="ui-text text-muted-foreground">{mode.description}</div>
+                        <Badge variant="secondary" className="mt-1 caption-text">
                           {mode.speed}
                         </Badge>
                       </div>

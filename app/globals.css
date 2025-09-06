@@ -121,6 +121,100 @@
   }
 }
 
+/* Mobile Typography Optimizations */
+@layer utilities {
+  /* Responsive text sizes - smaller on mobile, maintaining hierarchy */
+  .text-responsive-xs {
+    @apply text-xs sm:text-sm;
+  }
+
+  .text-responsive-sm {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-base {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-lg {
+    @apply text-base sm:text-lg;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-xl sm:text-2xl;
+  }
+
+  .text-responsive-3xl {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  .text-responsive-4xl {
+    @apply text-3xl sm:text-4xl;
+  }
+
+  /* Mobile-optimized headings */
+  .heading-1 {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-bold;
+  }
+
+  .heading-2 {
+    @apply text-xl sm:text-2xl lg:text-3xl font-semibold;
+  }
+
+  .heading-3 {
+    @apply text-lg sm:text-xl lg:text-2xl font-semibold;
+  }
+
+  .heading-4 {
+    @apply text-base sm:text-lg lg:text-xl font-semibold;
+  }
+
+  /* Mobile-optimized body text */
+  .body-large {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .body-base {
+    @apply text-xs sm:text-sm lg:text-base;
+  }
+
+  .body-small {
+    @apply text-xs sm:text-sm;
+  }
+
+  /* Mobile-optimized UI text */
+  .ui-text {
+    @apply text-xs sm:text-sm;
+  }
+
+  .ui-text-large {
+    @apply text-sm sm:text-base;
+  }
+
+  /* Mobile-optimized labels */
+  .label-text {
+    @apply text-xs sm:text-sm font-medium;
+  }
+
+  /* Mobile-optimized captions */
+  .caption-text {
+    @apply text-xs;
+  }
+
+  /* Mobile-optimized button text */
+  .button-text {
+    @apply text-xs sm:text-sm font-medium;
+  }
+
+  .button-text-large {
+    @apply text-sm sm:text-base font-medium;
+  }
+}
+
 /* TipTap Editor Styles */
 .ProseMirror {
   outline: none;

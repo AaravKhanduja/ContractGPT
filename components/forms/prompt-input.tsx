@@ -41,7 +41,7 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
       <CardContent className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="contract-name" className="text-base font-medium">
+            <Label htmlFor="contract-name" className="label-text">
               Contract Name
             </Label>
             <Input
@@ -49,13 +49,13 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
               placeholder="e.g., Website Development Contract, Logo Design Agreement..."
               value={contractName}
               onChange={(e) => setContractName(e.target.value)}
-              className="text-base"
+              className="ui-text-large"
               disabled={loading}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="client-input" className="text-base font-medium">
+            <Label htmlFor="client-input" className="label-text">
               Paste client&apos;s message or brief
             </Label>
             <Textarea
@@ -63,10 +63,10 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
               placeholder="e.g., I need a website for my bakery with online ordering and payment integration. My budget is around $5000 and I need it done in 6 weeks..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="min-h-[150px] sm:min-h-[200px] text-base leading-relaxed resize-none"
+              className="min-h-[150px] sm:min-h-[200px] body-base leading-relaxed resize-none"
               disabled={loading}
             />
-            <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-2 ui-text text-muted-foreground">
               <span>Be as detailed as possible for best results</span>
               <span>{input.length} characters</span>
             </div>
@@ -84,14 +84,14 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
             </div>
-            <p className="text-sm">
+            <p className="ui-text">
               AI is analyzing your request and generating a professional contract...
             </p>
           </div>
         )}
 
         <div className="space-y-3">
-          <h4 className="font-medium text-sm">Quick Examples:</h4>
+          <h4 className="font-medium ui-text">Quick Examples:</h4>
           <div className="space-y-2">
             {examplePrompts.map((prompt, index) => (
               <div key={index} className="border-b border-border last:border-b-0 pb-3 last:pb-0">
@@ -101,10 +101,10 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
                   onClick={() => setInput(prompt)}
                   disabled={loading}
                 >
-                  <Badge variant="secondary" className="mb-2 text-xs">
+                  <Badge variant="secondary" className="mb-2 caption-text">
                     Example {index + 1}
                   </Badge>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="ui-text text-muted-foreground leading-relaxed">
                     {prompt.length > 120 ? `${prompt.substring(0, 120)}...` : prompt}
                   </p>
                 </button>

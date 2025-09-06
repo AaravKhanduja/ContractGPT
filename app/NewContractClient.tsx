@@ -32,10 +32,10 @@ export default function NewContractClient() {
               <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-primary" />
               </div>
-              <h1 className="text-3xl font-bold text-foreground">Generate New Contract</h1>
+              <h1 className="heading-1 text-foreground">Generate New Contract</h1>
             </div>
 
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground body-large">
               Paste your client&apos;s request below and let AI transform it into a professional
               contract.
             </p>

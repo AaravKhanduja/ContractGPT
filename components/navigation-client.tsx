@@ -42,7 +42,7 @@ export default function NavigationClient() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-primary hover:bg-accent',
+                  'px-3 py-2 rounded-md ui-text font-medium transition-colors hover:text-primary hover:bg-accent',
                   pathname === item.href ? 'text-primary bg-accent' : 'text-muted-foreground'
                 )}
               >
@@ -85,7 +85,7 @@ export default function NavigationClient() {
           <div className="flex flex-col h-full">
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <span className="text-lg font-semibold">Menu</span>
+              <span className="text-responsive-lg font-semibold">Menu</span>
               <Button
                 variant="ghost"
                 size="sm"
@@ -106,7 +106,7 @@ export default function NavigationClient() {
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      'flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-colors hover:text-primary hover:bg-accent',
+                      'flex items-center space-x-3 px-4 py-3 rounded-lg ui-text-large font-medium transition-colors hover:text-primary hover:bg-accent',
                       pathname === item.href ? 'text-primary bg-accent' : 'text-muted-foreground'
                     )}
                   >

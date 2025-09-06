@@ -304,64 +304,81 @@ export default function ContractPage() {
         {/* Error Display */}
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm">{error}</p>
+            <p className="text-red-600 ui-text">{error}</p>
           </div>
         )}
 
         {/* Original Prompt */}
         {originalPrompt && (
           <div className="mb-8 p-4 bg-accent/50 rounded-lg border border-accent">
-            <h3 className="text-sm font-medium text-foreground mb-2">Original Request:</h3>
-            <p className="text-sm text-muted-foreground italic">&ldquo;{originalPrompt}&rdquo;</p>
+            <h3 className="label-text text-foreground mb-2">Original Request:</h3>
+            <p className="ui-text text-muted-foreground italic">&ldquo;{originalPrompt}&rdquo;</p>
           </div>
         )}
 
         {/* Action Buttons */}
-        <div className="mb-6 flex justify-end space-x-2">
+        <div className="mb-6">
           {isEditing ? (
-            <>
-              <Button variant="outline" onClick={handleCancel} className="hover:bg-accent">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 sm:justify-end">
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+                className="hover:bg-accent h-11 sm:h-9"
+              >
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="bg-primary hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 h-11 sm:h-9"
               >
                 <Save className={`h-4 w-4 mr-2 ${isSaving ? 'animate-spin' : ''}`} />
                 {isSaving ? 'Saving...' : 'Save'}
               </Button>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="grid grid-cols-2 sm:flex sm:flex-row gap-3 sm:gap-2 sm:justify-end">
               <Button
                 onClick={() => fetchContract(true)}
                 disabled={isRegenerating}
                 variant="outline"
-                className="hover:bg-accent"
+                className="hover:bg-accent h-11 sm:h-9"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${isRegenerating ? 'animate-spin' : ''}`} />
-                {isRegenerating ? 'Regenerating...' : 'Regenerate'}
+                <span className="hidden sm:inline">
+                  {isRegenerating ? 'Regenerating...' : 'Regenerate'}
+                </span>
+                <span className="sm:hidden">{isRegenerating ? 'Regen...' : 'Regen'}</span>
               </Button>
-              <Button variant="outline" onClick={handleEdit} className="hover:bg-accent">
+              <Button
+                variant="outline"
+                onClick={handleEdit}
+                className="hover:bg-accent h-11 sm:h-9"
+              >
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </Button>
-              <Button variant="outline" onClick={handleDownload} className="hover:bg-accent">
+              <Button
+                variant="outline"
+                onClick={handleDownload}
+                className="hover:bg-accent h-11 sm:h-9"
+              >
                 <Download className="h-4 w-4 mr-2" />
-                Download
+                <span className="hidden sm:inline">Download</span>
+                <span className="sm:hidden">PDF</span>
               </Button>
               <Button
                 variant="outline"
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="hover:bg-red-50 hover:border-red-200 hover:text-red-600"
+                className="hover:bg-red-50 hover:border-red-200 hover:text-red-600 h-11 sm:h-9"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                <span className="hidden sm:inline">{isDeleting ? 'Deleting...' : 'Delete'}</span>
+                <span className="sm:hidden">{isDeleting ? 'Del...' : 'Del'}</span>
               </Button>
-            </>
+            </div>
           )}
         </div>
 
@@ -380,19 +397,17 @@ export default function ContractPage() {
                 <ReactMarkdown
                   components={{
                     h1: ({ children }) => (
-                      <h1 className="text-3xl font-bold text-foreground mb-6 pb-4 border-b border-border">
+                      <h1 className="heading-1 text-foreground mb-6 pb-4 border-b border-border">
                         {children}
                       </h1>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="text-xl font-semibold text-foreground mt-8 mb-4 flex items-center">
+                      <h2 className="heading-2 text-foreground mt-8 mb-4 flex items-center">
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="text-lg font-semibold text-foreground mt-6 mb-3">
-                        {children}
-                      </h3>
+                      <h3 className="heading-3 text-foreground mt-6 mb-3">{children}</h3>
                     ),
                     p: ({ children }) => (
                       <p className="text-foreground mb-4 leading-relaxed">{children}</p>
@@ -418,16 +433,16 @@ export default function ContractPage() {
               </div>
               {/* Signature Section */}
               <div className="mt-12 border-t pt-6 border-border text-foreground">
-                <h2 className="text-xl font-semibold mb-4">Signatures</h2>
+                <h2 className="heading-2 mb-4">Signatures</h2>
 
                 <div className="flex flex-col space-y-6">
                   <div>
                     <div className="border-b border-muted h-10 w-64"></div>
-                    <p className="text-sm text-foreground mt-1">Client Signature</p>
+                    <p className="ui-text text-foreground mt-1">Client Signature</p>
                   </div>
                   <div>
                     <div className="border-b border-muted h-10 w-64"></div>
-                    <p className="text-sm text-foreground mt-1">Service Provider Signature</p>
+                    <p className="ui-text text-foreground mt-1">Service Provider Signature</p>
                   </div>
                 </div>
               </div>
