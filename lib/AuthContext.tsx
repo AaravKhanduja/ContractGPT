@@ -93,14 +93,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } = supabase.auth.onAuthStateChange(async (event: string, session: Session | null) => {
         setUser(session?.user ?? null);
 
-        // Redirect to home page after successful sign in, but only if we're on an auth page
+        // Redirect to generate page after successful sign in, but only if we're on an auth page
         if (
           event === 'SIGNED_IN' &&
           session?.user &&
           window.location.pathname.startsWith('/auth/')
         ) {
           setTimeout(() => {
-            window.location.href = '/';
+            window.location.href = '/generate';
           }, 100);
         }
       });
