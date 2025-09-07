@@ -76,8 +76,11 @@ export async function POST(req: NextRequest) {
             content: TEMPLATE_FILL_PROMPT.replace('[USER_REQUEST]', prompt),
           },
         ],
-        temperature: 0.5, // Lower temperature for more consistent template filling
-        max_tokens: 1000, // Much shorter response needed
+        temperature: 0.2, // Very low temperature for consistent template filling
+        max_tokens: 800, // Even shorter for maximum speed
+        top_p: 0.8, // Focus on most likely tokens
+        frequency_penalty: 0.0, // No penalty for template consistency
+        presence_penalty: 0.0, // No penalty for template structure
       }),
     });
 

@@ -8,22 +8,32 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Zap, Clock, Shield } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { FileText, Zap, Clock, Shield, Rocket } from 'lucide-react';
 
-type GenerationMode = 'standard' | 'fast' | 'template' | 'streaming';
+type GenerationMode = 'instant' | 'template' | 'fast' | 'streaming' | 'standard';
 
 export default function OptimizedContractForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [generationMode, setGenerationMode] = useState<GenerationMode>('fast');
+  const [generationMode, setGenerationMode] = useState<GenerationMode>('instant');
   const [prompt, setPrompt] = useState('');
   const [contractName, setContractName] = useState('');
+  const [showLoadingSkeleton, setShowLoadingSkeleton] = useState(false);
 
   const generationModes = [
     {
+      id: 'instant' as GenerationMode,
+      name: 'Instant',
+      description: 'Lightning fast - No AI needed',
+      icon: Rocket,
+      color: 'bg-emerald-500',
+      speed: '<1 second',
+    },
+    {
       id: 'template' as GenerationMode,
       name: 'Template',
-      description: 'Fastest - Uses pre-built template',
+      description: 'AI-powered template filling',
       icon: Zap,
       color: 'bg-green-500',
       speed: '~2-3 seconds',
@@ -31,7 +41,7 @@ export default function OptimizedContractForm() {
     {
       id: 'fast' as GenerationMode,
       name: 'Fast',
-      description: 'Optimized prompt, faster generation',
+      description: 'Optimized AI generation',
       icon: Clock,
       color: 'bg-blue-500',
       speed: '~5-8 seconds',
@@ -56,6 +66,8 @@ export default function OptimizedContractForm() {
 
   const getApiEndpoint = (mode: GenerationMode) => {
     switch (mode) {
+      case 'instant':
+        return '/api/generate-contract-instant';
       case 'template':
         return '/api/generate-contract-template';
       case 'fast':
@@ -76,6 +88,7 @@ export default function OptimizedContractForm() {
     }
 
     setLoading(true);
+    setShowLoadingSkeleton(true);
 
     try {
       if (generationMode === 'streaming') {
@@ -88,6 +101,7 @@ export default function OptimizedContractForm() {
       alert('Failed to generate contract. Please try again.');
     } finally {
       setLoading(false);
+      setShowLoadingSkeleton(false);
     }
   };
 
@@ -288,6 +302,27 @@ export default function OptimizedContractForm() {
               `Generate ${generationModes.find((m) => m.id === generationMode)?.name} Contract`
             )}
           </Button>
+
+          {/* Loading Skeleton */}
+          {showLoadingSkeleton && (
+            <div className="mt-6 space-y-4">
+              <div className="text-center text-sm text-muted-foreground">
+                {generationMode === 'instant'
+                  ? 'Preparing your contract...'
+                  : 'AI is generating your contract...'}
+              </div>
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-4/5" />
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-4 w-3/5" />
+                <Skeleton className="h-4 w-2/5" />
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

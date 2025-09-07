@@ -77,8 +77,11 @@ export async function POST(req: NextRequest) {
           { role: 'system', content: OPTIMIZED_SYSTEM_PROMPT },
           { role: 'user', content: prompt },
         ],
-        temperature: 0.7,
-        max_tokens: 1500, // Limit response length for speed
+        temperature: 0.3, // Lower temperature for faster, more consistent output
+        max_tokens: 1200, // Reduced for faster generation
+        top_p: 0.9, // Focus on most likely tokens
+        frequency_penalty: 0.1, // Reduce repetition
+        presence_penalty: 0.1, // Encourage new content
       }),
     });
 

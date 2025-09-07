@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 interface PromptInputProps {
   onGenerate: (input: string, contractName: string) => void;
   loading: boolean;
+  showStreamingProgress?: boolean;
 }
 
 const examplePrompts = [
@@ -20,7 +21,11 @@ const examplePrompts = [
   'Create a brand identity package including logo, business cards, and website. Budget flexible, need it ASAP.',
 ];
 
-export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
+export default function PromptInput({
+  onGenerate,
+  loading,
+  showStreamingProgress = false,
+}: PromptInputProps) {
   const [input, setInput] = useState('');
   const [contractName, setContractName] = useState('');
 
@@ -77,7 +82,7 @@ export default function PromptInput({ onGenerate, loading }: PromptInputProps) {
           </Button>
         </form>
 
-        {loading && (
+        {loading && !showStreamingProgress && (
           <div className="bg-muted/50 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center space-x-2 text-muted-foreground mb-2">
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
