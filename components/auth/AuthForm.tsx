@@ -44,7 +44,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         if (error) throw new Error(error.message);
 
         // Simple redirect after successful sign in
-        window.location.href = '/';
+        window.location.href = '/generate';
       } else {
         if (formData.password !== formData.confirmPassword) {
           throw new Error('Passwords do not match');

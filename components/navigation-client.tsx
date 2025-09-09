@@ -17,7 +17,7 @@ export default function NavigationClient() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { href: '/', label: 'New Contract', icon: Plus },
+    { href: '/generate', label: 'New Contract', icon: Plus },
     { href: '/contracts', label: 'My Contracts', icon: FileText },
   ];
 
