@@ -67,8 +67,8 @@ export default function ProfileOverlay({ user, onClose, onLogout }: ProfileOverl
           throw new Error(errorData.error || 'Failed to delete account');
         }
 
-        // Account deleted successfully, redirect to signin
-        window.location.href = '/auth/signin';
+        // Account deleted successfully, redirect to landing page
+        window.location.href = '/';
       }
     } catch (error) {
       console.error('Failed to delete account:', error);

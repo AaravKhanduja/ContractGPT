@@ -24,7 +24,7 @@ export default function NavigationClient() {
   const handleLogout = async () => {
     try {
       await signOut();
-      router.push('/auth/signin');
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
     }
