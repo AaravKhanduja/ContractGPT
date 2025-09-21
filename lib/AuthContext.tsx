@@ -127,6 +127,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
 
           setUser(user as User);
+
+          // Redirect to generate page after successful sign in in development mode
+          if (window.location.pathname.startsWith('/auth/')) {
+            setTimeout(() => {
+              window.location.href = '/generate';
+            }, 100);
+          }
+
           return { error: null };
         } catch {
           return { error: new Error('Invalid stored user data') };
@@ -145,6 +153,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
 
           setUser(data.user);
+
+          // Redirect to generate page after successful sign in in production mode
+          if (window.location.pathname.startsWith('/auth/')) {
+            setTimeout(() => {
+              window.location.href = '/generate';
+            }, 100);
+          }
+
           return { error: null };
         } catch {
           return { error: new Error('Failed to sign in') };

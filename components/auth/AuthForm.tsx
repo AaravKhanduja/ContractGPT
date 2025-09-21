@@ -43,8 +43,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         const { error } = await signIn(formData.email, formData.password);
         if (error) throw new Error(error.message);
 
-        // Simple redirect after successful sign in
-        window.location.href = '/generate';
+        // Let AuthContext handle the redirect to avoid conflicts
       } else {
         if (formData.password !== formData.confirmPassword) {
           throw new Error('Passwords do not match');
