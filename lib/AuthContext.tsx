@@ -243,6 +243,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
 
       setUser(devUser as User);
+
+      // Redirect to generate page after successful OAuth sign in in development mode
+      if (window.location.pathname.startsWith('/auth/')) {
+        setTimeout(() => {
+          window.location.href = '/generate';
+        }, 100);
+      }
+
       return { error: null };
     } else {
       // Production mode: use Supabase Google OAuth
@@ -254,13 +262,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
-          options: forceAccountSelection
-            ? {
-                queryParams: {
-                  prompt: 'select_account', // Force Google to show account selection
-                },
-              }
-            : undefined,
+          options: {
+            redirectTo: `${window.location.origin}/generate`,
+            ...(forceAccountSelection
+              ? {
+                  queryParams: {
+                    prompt: 'select_account', // Force Google to show account selection
+                  },
+                }
+              : {}),
+          },
         });
 
         // Clear the flag after OAuth initiation
